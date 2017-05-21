@@ -1,0 +1,1347 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Kybernetik.Core</name>
+    </assembly>
+    <members>
+        <member name="T:Kybernetik.MeshBuilder">
+            <summary>
+            Encapsulates lists of vertices, normals, etc. to simplify the procedural generation of meshes.
+            <para></para>
+            To use: simply add elements to the lists then call any of the Compile() overloads.
+            <para></para>
+            Note: when reusing a <see cref="T:Kybernetik.MeshBuilder"/>, you must call <see cref="M:Kybernetik.MeshBuilder.Clear"/> before you begin.
+            </summary>
+        </member>
+        <member name="F:Kybernetik.MeshBuilder.topology">
+            <summary>The <see cref="T:UnityEngine.MeshTopology"/> with which the <see cref="T:UnityEngine.Mesh"/> will be compiled.</summary>
+        </member>
+        <member name="F:Kybernetik.MeshBuilder.Vertices">
+            <summary>The vertex positions which will be used for <see cref="P:UnityEngine.Mesh.vertices"/>.</summary>
+        </member>
+        <member name="F:Kybernetik.MeshBuilder.Normals">
+            <summary>The vertex normals which will be used for <see cref="P:UnityEngine.Mesh.normals"/>.</summary>
+        </member>
+        <member name="F:Kybernetik.MeshBuilder.UVs">
+            <summary>The UV coordinates which will be used for <see cref="P:UnityEngine.Mesh.uv"/>.</summary>
+        </member>
+        <member name="F:Kybernetik.MeshBuilder.UVs2">
+            <summary>The UV coordinates which will be used for <see cref="P:UnityEngine.Mesh.uv2"/>.</summary>
+        </member>
+        <member name="F:Kybernetik.MeshBuilder.UVs3">
+            <summary>The UV coordinates which will be used for <see cref="P:UnityEngine.Mesh.uv3"/>.</summary>
+        </member>
+        <member name="F:Kybernetik.MeshBuilder.UVs4">
+            <summary>The UV coordinates which will be used for <see cref="P:UnityEngine.Mesh.uv4"/>.</summary>
+        </member>
+        <member name="F:Kybernetik.MeshBuilder.Tangents">
+            <summary>The vertex tangents which will be used for <see cref="P:UnityEngine.Mesh.tangents"/>.</summary>
+        </member>
+        <member name="F:Kybernetik.MeshBuilder.Colors">
+            <summary>The vertex colors which will be used for <see cref="P:UnityEngine.Mesh.colors"/>.</summary>
+        </member>
+        <member name="F:Kybernetik.MeshBuilder.Indices">
+            <summary>The mesh indices which will be used for <see cref="P:UnityEngine.Mesh.triangles"/> (though the topology isn't necessarily triangles).</summary>
+        </member>
+        <member name="P:Kybernetik.MeshBuilder.VertexCount">
+            <summary>The number of vertices which have currently been built.</summary>
+        </member>
+        <member name="P:Kybernetik.MeshBuilder.IndexCount0">
+            <summary>The number of indices which have currently been built in the first sub mesh.</summary>
+        </member>
+        <member name="P:Kybernetik.MeshBuilder.SubMeshCount">
+            <summary>The number of sub meshes.</summary>
+        </member>
+        <member name="M:Kybernetik.MeshBuilder.#ctor(System.Int32,System.Int32[])">
+            <summary>Constructs a mesh builder with UVs and Normals using <see cref="F:UnityEngine.MeshTopology.Triangles"/>.</summary>
+        </member>
+        <member name="M:Kybernetik.MeshBuilder.#ctor(Kybernetik.MeshBuilder.MeshChannel,UnityEngine.MeshTopology,System.Int32,System.Int32[])">
+            <summary>Constructs a mesh builder with a specific set of data channels and topology.</summary>
+        </member>
+        <member name="T:Kybernetik.MeshBuilder.MeshChannel">
+            <summary>
+            Flags for each of the optional channels a <see cref="T:UnityEngine.Mesh"/> can contain.
+            </summary>
+        </member>
+        <member name="F:Kybernetik.MeshBuilder.MeshChannel.UVs">
+            <summary>First set of UV coordinates.</summary>
+        </member>
+        <member name="F:Kybernetik.MeshBuilder.MeshChannel.UVs2">
+            <summary>Second set of UV coordinates.</summary>
+        </member>
+        <member name="F:Kybernetik.MeshBuilder.MeshChannel.UVs3">
+            <summary>Third set of UV coordinates.</summary>
+        </member>
+        <member name="F:Kybernetik.MeshBuilder.MeshChannel.UVs4">
+            <summary>Fourth set of UV coordinates.</summary>
+        </member>
+        <member name="F:Kybernetik.MeshBuilder.MeshChannel.Normals">
+            <summary>Vertex normals.</summary>
+        </member>
+        <member name="F:Kybernetik.MeshBuilder.MeshChannel.Tangents">
+            <summary>Vertex tangents.</summary>
+        </member>
+        <member name="F:Kybernetik.MeshBuilder.MeshChannel.Colors">
+            <summary>Vertex colors.</summary>
+        </member>
+        <member name="F:Kybernetik.MeshBuilder.MeshChannel.All">
+            <summary>All optional channels.</summary>
+        </member>
+        <member name="M:Kybernetik.MeshBuilder.Clear">
+            <summary>Clears this <see cref="T:Kybernetik.MeshBuilder"/> to be ready for reuse.</summary>
+        </member>
+        <member name="M:Kybernetik.MeshBuilder.IndexTriangle(System.Int32)">
+            <summary>
+            Adds indices for a triangle starting at the current vertex count: [+0][+1][+2].
+            <para></para>You will generally want to call this method before adding the associated vertices.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshBuilder.Index2Triangles(System.Int32)">
+            <summary>
+            Adds indices for 2 triangles starting at the current vertex count: [+0][+1][+2] and [+0][+2][+3].
+            <para></para>You will generally want to call this method before adding the associated vertices.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshBuilder.Index3Triangles(System.Int32)">
+            <summary>
+            Adds indices for 3 triangles in a fan starting at the current vertex count: [+0][+1][+2] and [+0][+2][+3] and [+0][+3][+4].
+            <para></para>You will generally want to call this method before adding the associated vertices.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshBuilder.IndexTriangle(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>Adds the specified indices to the specified sub mesh.</summary>
+        </member>
+        <member name="M:Kybernetik.MeshBuilder.Index2Triangles(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>Adds the specified indices to the specified sub mesh.</summary>
+        </member>
+        <member name="M:Kybernetik.MeshBuilder.Index3Triangles(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>Adds the specified indices to the specified sub mesh.</summary>
+        </member>
+        <member name="M:Kybernetik.MeshBuilder.IndexLine(System.Int32)">
+            <summary>
+            Adds a pair of indices for a line starting at the current vertex count: [+0][+1].
+            <para></para>You will generally want to call this method before adding the associated vertices.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshBuilder.FillIncrementalIndices(System.Int32)">
+            <summary>
+            Fills all the indices for the specified sub mesh such that 'Indices[subMesh][i] == i' up to the capacity
+            of that sub mesh.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshBuilder.Compile(UnityEngine.Mesh)">
+            <summary>
+            Assigns the data from this <see cref="T:Kybernetik.MeshBuilder"/> to 'mesh'.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshBuilder.Compile">
+            <summary>
+            Assigns the data from this <see cref="T:Kybernetik.MeshBuilder"/> to a new <see cref="T:UnityEngine.Mesh"/>.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshBuilder.Compile(UnityEngine.MeshFilter)">
+            <summary>
+            Assigns the data from this <see cref="T:Kybernetik.MeshBuilder"/> to 'meshFilter.mesh'.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshBuilder.Compile(UnityEngine.MeshCollider)">
+            <summary>
+            Assigns the data from this <see cref="T:Kybernetik.MeshBuilder"/> to 'meshCollider.mesh'.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshBuilder.op_Implicit(Kybernetik.MeshBuilder)~UnityEngine.Mesh">
+            <summary>Implicit conversion calls <see cref="M:Kybernetik.MeshBuilder.Compile"/> and <see cref="M:UnityEngine.Mesh.RecalculateBounds"/>.</summary>
+        </member>
+        <member name="M:Kybernetik.MeshBuilder.LogData(System.String)">
+            <summary>
+            Logs all the mesh data in this <see cref="T:Kybernetik.MeshBuilder"/>. Also puts the message in the system copy buffer
+            so you can paste it into a text editor because Unity's console truncates messages that are too long.
+            </summary>
+        </member>
+        <member name="T:Kybernetik.MeshUtils">
+            <summary>
+            Various utility methods for using the <see cref="T:Kybernetik.MeshBuilder"/> class.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshUtils.TranslateVertices(Kybernetik.MeshBuilder,UnityEngine.Vector3,System.Int32,System.Int32)">
+            <summary>
+            Adds the specified translation to all vertices in the specified range.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshUtils.TranslateVertices(Kybernetik.MeshBuilder,UnityEngine.Vector3,System.Int32)">
+            <summary>
+            Adds the specified translation to all vertices from the specified start index up to the current vertex count.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshUtils.TranslateVertices(Kybernetik.MeshBuilder,UnityEngine.Vector3)">
+            <summary>
+            Adds the specified translation to all vertices up to the current vertex count.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshUtils.RotateVertices(Kybernetik.MeshBuilder,UnityEngine.Quaternion)">
+            <summary>
+            Multiplies all vertices and normaly by 'rotation'.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshUtils.ScaleVertices(Kybernetik.MeshBuilder,System.Single)">
+            <summary>
+            Multiplies all vertices by 'scale'.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshUtils.DuplicateVertex(Kybernetik.MeshBuilder,System.Int32,UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.Vector2)">
+            <summary>
+            Adds a new vertex with its position at 'builder.Vertices[vertex] + offset' and the specified 'normal' and 'uv' values.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshUtils.DuplicateVertex(Kybernetik.MeshBuilder,System.Int32,UnityEngine.Vector3,UnityEngine.Vector2)">
+            <summary>
+            Adds a new vertex with its position at 'builder.Vertices[vertex]' and the specified 'normal' and 'uv' values.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshUtils.DuplicateVertex(Kybernetik.MeshBuilder,System.Int32,UnityEngine.Vector3)">
+            <summary>
+            Adds a new vertex with its position at 'builder.Vertices[vertex]' and the specified 'normal' value.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshUtils.PlaceQuadVertices(System.Collections.Generic.List{UnityEngine.Vector3},UnityEngine.Vector3,UnityEngine.Vector2)">
+            <summary>
+            Adds 4 vertices to form a quad.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshUtils.PlaceQuadUVs(System.Collections.Generic.List{UnityEngine.Vector2},UnityEngine.Vector2,UnityEngine.Vector2)">
+            <summary>
+            Adds 4 UV values to planar map a quad.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshUtils.ShapeEquilateralPolygonXY(Kybernetik.MeshBuilder,System.Int32,UnityEngine.Vector3,System.Int32,System.Single,UnityEngine.Rect)">
+            <summary>
+            Adds indices, vertices, normals, and UVs for a polygon on the XY plane with the specified parameters.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshUtils.ShapeEquilateralPolygonXY(Kybernetik.MeshBuilder,System.Int32,UnityEngine.Vector3,System.Int32,System.Single)">
+            <summary>
+            Adds indices, vertices, normals, and UVs for a polygon on the XY plane with the specified parameters.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshUtils.ExtrudePolygon(Kybernetik.MeshBuilder,System.Int32,System.Int32,System.Int32,UnityEngine.Vector3)">
+            <summary>
+            Duplicates the vertex data of a polygon with the vertices offset by 'extrusion' and adds indices to join
+            them as faces to the original vertices.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshUtils.BuildRingXY(Kybernetik.MeshBuilder,UnityEngine.Vector3,System.Int32,System.Single,System.Single)">
+            <summary>
+            Adds indices, vertices, and normals to form a ring on the XY plane with the specified parameters.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshUtils.PlanarMapXY(Kybernetik.MeshBuilder,System.Int32,System.Int32,UnityEngine.Rect,UnityEngine.Rect)">
+            <summary>
+            Planar maps the UV values for a range of vertices into the 'uvArea' based on their XY positions relative to 'vertexArea'.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshUtils.PlanarMapXY(Kybernetik.MeshBuilder)">
+            <summary>
+            Planar maps the UV values for all vertices using their XY positions.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshUtils.SetCount``1(System.Collections.Generic.List{``0},System.Int32)">
+            <summary>
+            Adds members to the list (or removes them) until the count reaches the specified value.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshUtils.VectorXYFromAngle(System.Single,System.Single,System.Single)">
+            <summary>Generates a vector with the specified z value and length in the specified direction on the XY axis.</summary>
+        </member>
+        <member name="M:Kybernetik.MeshUtils.GetUVs(Kybernetik.MeshBuilder,System.Int32)">
+            <param name="builder">The <see cref="T:Kybernetik.MeshBuilder"/> to get the UV channel from.</param>
+            <param name="channel">The channel number (must be 1, 2, 3, or 4).</param>
+        </member>
+        <member name="M:Kybernetik.MeshUtils.CalculateNormals(Kybernetik.MeshBuilder,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Doesn't take into account vertices that are shared by multiple triangles.
+            Only the last triangle to include each vertex will determine its normal.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.MeshUtils.CalculateMeshTangents(UnityEngine.Mesh)">
+            <summary>
+            Doesn't work properly.
+            TODO: Try: http://answers.unity3d.com/questions/7789/calculating-tangents-vector4.html
+            </summary>
+        </member>
+        <member name="T:Kybernetik.CSharp">
+            <summary>
+            A variety of methods relating to C# code.
+            Particularly useful for generating procedural code.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.GetReference(System.Type)">
+            <summary>
+            Returns the full name of a 'type' as it would appear in C# code.
+            <para></para>
+            For example, typeof(List&lt;float&gt;).FullName would give you:
+            System.Collections.Generic.List`1[[System.Single, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]
+            <para></para>
+            This method would instead return System.Collections.Generic.List&lt;float&gt;.
+            <para></para>
+            Note that all returned values are stored in a dictionary to speed up repeated use.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.AppendGenericArguments(System.Text.StringBuilder,System.Type,System.Int32@)">
+            <summary>
+            Appends the generic arguments of 'type' (after skipping the specified number).
+            </summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.GetReference(System.Reflection.MemberInfo)">
+            <summary>
+            Returns the full name of a 'member' as it would appear in C# code.
+            <para></para>
+            For example, passing this method info in as its own parameter would return "<see cref="T:Kybernetik.CSharp"/>.GetReference".
+            <para></para>
+            Note that when 'member' is a <see cref="T:System.Type"/>, this method calls <see cref="M:Kybernetik.CSharp.GetReference(System.Type)"/> instead.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.AppendReference(System.Text.StringBuilder,System.Reflection.MemberInfo)">
+            <summary>
+            Appends the full name of a 'member' as it would appear in C# code.
+            <para></para>
+            For example, passing this method info in as its own parameter would append "<see cref="T:Kybernetik.CSharp"/>.AppendReference".
+            <para></para>
+            Note that when 'member' is a <see cref="T:System.Type"/>, this method calls <see cref="M:Kybernetik.CSharp.GetReference(System.Type)"/> instead.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.GetReference(System.Delegate)">
+            <summary>Returns the full name of a  'method' as it would appear in C# code. See: <see cref="M:Kybernetik.CSharp.GetReference(System.Reflection.MemberInfo)"/>.</summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.GetReference(System.Action)">
+            <summary>Returns the full name of a  'method' as it would appear in C# code. See: <see cref="M:Kybernetik.CSharp.GetReference(System.Reflection.MemberInfo)"/>.</summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.GetReference``1(System.Action{``0})">
+            <summary>Returns the full name of a  'method' as it would appear in C# code. See: <see cref="M:Kybernetik.CSharp.GetReference(System.Reflection.MemberInfo)"/>.</summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.GetReference``1(System.Func{``0})">
+            <summary>Returns the full name of a  'method' as it would appear in C# code. See: <see cref="M:Kybernetik.CSharp.GetReference(System.Reflection.MemberInfo)"/>.</summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.GetReference``2(System.Func{``0,``1})">
+            <summary>Returns the full name of a  'method' as it would appear in C# code. See: <see cref="M:Kybernetik.CSharp.GetReference(System.Reflection.MemberInfo)"/>.</summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.GetReference``3(System.Func{``0,``1,``2})">
+            <summary>Returns the full name of a  'method' as it would appear in C# code. See: <see cref="M:Kybernetik.CSharp.GetReference(System.Reflection.MemberInfo)"/>.</summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.AppendReference(System.Text.StringBuilder,System.Delegate)">
+            <summary>Appends the full name of a  'method' as it would appear in C# code. See: <see cref="M:Kybernetik.CSharp.AppendReference(System.Text.StringBuilder,System.Reflection.MemberInfo)"/>.</summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.AppendReference(System.Text.StringBuilder,System.Action)">
+            <summary>Appends the full name of a  'method' as it would appear in C# code. See: <see cref="M:Kybernetik.CSharp.AppendReference(System.Text.StringBuilder,System.Reflection.MemberInfo)"/>.</summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.AppendReference``1(System.Text.StringBuilder,System.Action{``0})">
+            <summary>Appends the full name of a  'method' as it would appear in C# code. See: <see cref="M:Kybernetik.CSharp.AppendReference(System.Text.StringBuilder,System.Reflection.MemberInfo)"/>.</summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.AppendReference``1(System.Text.StringBuilder,System.Func{``0})">
+            <summary>Appends the full name of a  'method' as it would appear in C# code. See: <see cref="M:Kybernetik.CSharp.AppendReference(System.Text.StringBuilder,System.Reflection.MemberInfo)"/>.</summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.AppendReference``2(System.Text.StringBuilder,System.Func{``0,``1})">
+            <summary>Appends the full name of a  'method' as it would appear in C# code. See: <see cref="M:Kybernetik.CSharp.AppendReference(System.Text.StringBuilder,System.Reflection.MemberInfo)"/>.</summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.AppendReference``3(System.Text.StringBuilder,System.Func{``0,``1,``2})">
+            <summary>Appends the full name of a  'method' as it would appear in C# code. See: <see cref="M:Kybernetik.CSharp.AppendReference(System.Text.StringBuilder,System.Reflection.MemberInfo)"/>.</summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.AppendSignature(System.Reflection.MethodInfo,System.Text.StringBuilder,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>Appends the signature of 'method' as it would appear in C# code.</summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.GetSignature(System.Reflection.MethodInfo,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>Returns the signature of 'method' as it would appear in C# code.</summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.AppendMethodSignature(System.Text.StringBuilder,System.Type,System.Type,System.String,System.Type[],System.Type[])">
+            <summary>Appends the signature of a method with the specified details as it would appear in C# code.</summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.AppendUnderscoredFullName(System.Text.StringBuilder,System.Type)">
+            <summary>
+            Appends the full name of the given type with underscores instead of any characters that wouldn't be valid in a symbol name.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.IsValidInMemberName(System.Char)">
+            <summary>
+            Checks if the specified char can be used in a C# symbol name.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.ValidateMemberName(System.String)">
+            <summary>
+            Converts the specified string into a valid member name by inserting an underscore at the start if
+            necessary and replacing any invalid characters with underscores.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.ValidateMemberName(System.String,System.Int32,System.Int32)">
+            <summary>
+            Converts the specified substring into a valid member name by inserting an underscore at the start if
+            necessary and replacing any invalid characters with underscores.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.IsMemberNameEqual(System.String,System.Int32,System.Int32,System.String)">
+            <summary>
+            Checks if converting the rawName substring into a valid member name would produce memberName.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.OpenScope(System.Text.StringBuilder,System.Int32@)">
+            <summary>text.Indent(indent++).AppendLineConst("{");</summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.CloseScope(System.Text.StringBuilder,System.Int32@)">
+            <summary>text.Indent(--indent).AppendLineConst("}");</summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.CloseScopeFully(System.Text.StringBuilder,System.Int32)">
+            <summary>Appends closing brackets and new lines until the nestCount reaches 0.</summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.AppendForLoop(System.Text.StringBuilder,System.Int32,System.String,System.String)">
+            <summary>
+            Appends the opening of a for loop: for (int i = 0; i &lt; length; i++).
+            </summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.AppendDefault``1(System.Text.StringBuilder)">
+            <summary>Append "null" for classes or "default(T)" for structs.</summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.AppendDefault(System.Text.StringBuilder,System.Type)">
+            <summary>Append "null" for classes or "default(type)" for structs.</summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.AppendRegion(System.Text.StringBuilder,System.Int32,System.String)">
+            <summary>
+            Indents the text by the specified amount and appends #region regionName. 
+            </summary>
+        </member>
+        <member name="M:Kybernetik.CSharp.AppendEndRegion(System.Text.StringBuilder,System.Int32)">
+            <summary>
+            Indents the text by the specified amount and appends #endregion. 
+            </summary>
+        </member>
+        <member name="T:Kybernetik.Utils">
+            <summary>A variety of miscellaneous utility methods.</summary>
+            <summary>A variety of miscellaneous utility methods.</summary>
+        </member>
+        <member name="T:Kybernetik.Utils.CollectionPool`2">
+            <summary>
+            Maintains a pool of ICollections so they can be reused without garbage collection.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.CollectionPool`2.Get">
+            <summary>
+            Returns an available collection from the pool or creates a new one if there are none.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.CollectionPool`2.Release(`0)">
+            <summary>
+            Clears a collection and puts it into the pool to be available for future use.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.GetList``1">
+            <summary>
+            Returns an available <see cref="T:System.Collections.Generic.List`1"/> from the pool or creates a new one if there are none.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.Release``1(System.Collections.Generic.List{``0})">
+            <summary>
+            Clears the 'list' and puts it into the pool to be available for reuse.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.AppendReleaseList(System.Text.StringBuilder,System.String)">
+            <summary>
+            Appends a call to release the specified list.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.GetDictionary``2">
+            <summary>
+            Returns an available <see cref="T:System.Collections.Generic.Dictionary`2"/> from the pool or creates a new one if there are none.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.Release``2(System.Collections.Generic.Dictionary{``0,``1})">
+            <summary>
+            Clears the 'dictionary' and puts it into the pool to be available for reuse.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.GetHashSet``1">
+            <summary>
+            Returns an available <see cref="T:System.Collections.Generic.HashSet`1"/> from the pool or creates a new one if there are none.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.Release``1(System.Collections.Generic.HashSet{``0})">
+            <summary>
+            Clears the 'set' and puts it into the pool to be available for reuse.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.IsDependantOn``1(Kybernetik.IDependant{``0},``0)">
+            <summary>
+            Returns true if [on] is a dependency of [dependant].
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.TopologicalSort(System.Collections.Generic.IEnumerable{System.Type},System.Boolean)">
+            <summary>
+            Sorts a collection of types according to their <see cref="T:Kybernetik.TypeDependencyAttribute"/>s.
+            If TypeA depends on TypeB, TypeA will be put later in the output list.
+            </summary>
+            <param name="types">The collection of types to sort. If any item depends on a type that isn't present, it will be added automatically.</param>
+            <param name="ignoreCycles">If false, an <see cref="T:System.ArgumentException"/> will be thrown when a cyclic dependency is encountered</param>
+        </member>
+        <member name="M:Kybernetik.Utils.TopologicalSort``1(System.Collections.Generic.IEnumerable{``0},System.Boolean)">
+            <summary>
+            Sorts a collection of <see cref="T:Kybernetik.IDependant`1"/>.
+            If ItemA depends on ItemB, ItemA will be put later in the returned list.
+            </summary>
+            <param name="collection">The collection to sort. If any item depends on a type that isn't present, it will be added automatically.</param>
+            <param name="ignoreCycles">If false, an <see cref="T:System.ArgumentException"/> will be thrown when a cyclic dependency is encountered.</param>
+        </member>
+        <member name="M:Kybernetik.Utils.TopologicalSort``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{Kybernetik.IDependant{``0}},System.Collections.Generic.IEqualityComparer{``0},System.Boolean)">
+            <summary>
+            Sorts a collection according to a collection of dependants.
+            If ItemA depends on ItemB, ItemA will be put later in the returned list.
+            </summary>
+            <param name="collection">The collection to sort. If any element depends on something that isn't present, it will be added automatically.</param>
+            <param name="dependants">An array which specifies what each element is dependant on.</param>
+            <param name="comparer">The equality comparer to use. Null will use the default comparer.</param>
+            <param name="ignoreCycles">If false, an <see cref="T:System.ArgumentException"/> will be thrown when a cyclic dependency is encountered</param>
+        </member>
+        <member name="M:Kybernetik.Utils.TopologicalSort``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Collections.Generic.IEnumerable{``0}},System.Collections.Generic.IEqualityComparer{``0},System.Boolean)">
+            <summary>
+            Sorts an array according to an array of dependants.
+            If ItemA depends on ItemB, ItemA will be put later in the returned list.
+            </summary>
+            <param name="collection">The collection to sort. If any element depends on something that isn't present, it will be added automatically.</param>
+            <param name="getDependencies">A delegate that can return the dependencies of any given element.</param>
+            <param name="comparer">The equality comparer to use. Null will use the default comparer.</param>
+            <param name="ignoreCycles">If false, an <see cref="T:System.ArgumentException"/> will be thrown when a cyclic dependency is encountered</param>
+        </member>
+        <member name="M:Kybernetik.Utils.TopologicalSort``1(System.Collections.Generic.List{``0},System.Int32,System.Func{``0,System.Collections.Generic.IEnumerable{``0}},System.Collections.Generic.IEqualityComparer{``0},System.Boolean)">
+            <summary>
+            Sorts an array according to an array of dependants.
+            If ItemA depends on ItemB, ItemA will be put later in the returned list.
+            </summary>
+            <param name="list">The list to sort. If any element depends on something that isn't present, it will be added automatically.</param>
+            <param name="skip">The index at which to start sorting. Everything before this index is kept in the same order as the input list.</param>
+            <param name="getDependencies">A delegate that can return the dependencies of any given element.</param>
+            <param name="comparer">The equality comparer to use. Null will use the default comparer.</param>
+            <param name="ignoreCycles">If false, an <see cref="T:System.ArgumentException"/> will be thrown when a cyclic dependency is encountered</param>
+        </member>
+        <member name="M:Kybernetik.Utils.TopologicalSort``1(System.Collections.Generic.List{``0}@,System.Int32,System.Func{``0,System.Collections.Generic.IEnumerable{``0}},System.Collections.Generic.IEqualityComparer{``0},System.Boolean)">
+            <summary>
+            Sorts an array according to an array of dependants.
+            If ItemA depends on ItemB, ItemA will be put later in the returned list.
+            This method assigns a new list and releases the old one to the CollectionPool.
+            </summary>
+            <param name="list">The list to sort. If any element depends on something that isn't present, it will be added automatically.</param>
+            <param name="skip">The index at which to start sorting. Everything before this index is kept in the same order as the input list.</param>
+            <param name="getDependencies">A delegate that can return the dependencies of any given element.</param>
+            <param name="comparer">The equality comparer to use. Null will use the default comparer.</param>
+            <param name="ignoreCycles">If false, an <see cref="T:System.ArgumentException"/> will be thrown when a cyclic dependency is encountered</param>
+        </member>
+        <member name="M:Kybernetik.Utils.Get``2(System.Collections.Generic.Dictionary{``0,``1},``0,``1)">
+            <summary>
+            If the dictionary contains a value for the given key, that value is returned.
+            Otherwise the default value is returned.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.Pop``1(System.Collections.Generic.List{``0})">
+            <summary>
+            Removes and returns the last element in a list.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.InsertAt``1(``0[],System.Int32,``0)">
+            <summary>
+            Returns a copy of 'array' with 'element' inserted at 'index'.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.InsertAt``1(``0[],``0)">
+            <summary>
+            Returns a copy of 'array' with 'element' inserted at the end.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.RemoveAt``1(``0[],System.Int32)">
+            <summary>
+            Returns a copy of 'array' with the element at 'index' removed.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.AddIfNew``1(System.Collections.Generic.ICollection{``0},``0)">
+            <summary>
+            If 'collection' doesn't already contain 'value', this method adds it and returns true.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.StableInsertionSort``1(System.Collections.Generic.IList{``0},System.Comparison{``0})">
+            <summary>
+            Sorts 'list', maintaining the order of any elements with an identical comparison.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.DeepToString(System.Collections.IEnumerable,System.String)">
+            <summary>Returns a string containing the value of each element in 'collection'.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.DeepToString(System.Collections.IEnumerable)">
+            <summary>Returns a string containing the value of each element in 'collection' (each on a new line).</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.AppendDeepToString(System.Text.StringBuilder,System.Collections.IEnumerator,System.String)">
+            <summary>Each element returned by 'enumerator' is appended to 'text'.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.DeepToString(System.Collections.IEnumerator,System.String)">
+            <summary>Returns a string containing the value of each element in 'enumerator'.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.DeepToString(System.Collections.IEnumerator)">
+            <summary>Returns a string containing the value of each element in 'enumerator' (each on a new line).</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.DeepToStringTyped(System.Collections.IEnumerable)">
+            <summary>Returns a string containing the full type name of 'collection' followed by the value of each element.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.ReplaceSlashesForward(System.String)">
+            <summary>Replaces back slashes with forward slashes.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.ReplaceSlashesBack(System.String)">
+            <summary>Replaces forward slashes with back slashes.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.RemoveTrailingSlashes(System.String)">
+            <summary>Returns 'str' with any forward slashes removed from the end.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.SkipWhiteSpace(System.String,System.Int32@)">
+            <summary>
+            Increments 'index' until 'str[index]' is no longer a whitespace character.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.SkipWhiteSpaceBackwards(System.String,System.Int32@)">
+            <summary>
+            Decrements 'index' until 'str[index]' is no longer a whitespace character.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.GetFileExtensionIndex(System.String)">
+            <summary>
+            Gets the index of the '.' at the start of the file extension of 'path' (or -1 if it has no file extension).
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.CompareWithFilesBeforeFolders(System.String,System.String)">
+            <summary>
+            Compares two strings to sort files before sub folders.
+            <para></para>Note: this method only interprets forward slashes.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.ConvertCamelCaseToFriendly(System.String,System.Boolean)">
+            <summary>
+            Adds spaces to 'camelCase' before each uppercase letter.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.ConvertCamelCaseToFriendly(System.Text.StringBuilder,System.String,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Adds spaces to 'camelCase' before each uppercase letter.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.ConvertFieldNameToFriendly(System.String,System.Boolean)">
+            <summary>
+            Adds spaces to 'camelCase' before each uppercase letter and removes any underscores from the start.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.AppendXmlString(System.Text.StringBuilder,System.String)">
+            <summary>Appends the specified string sanitized for XML.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.ApplyBoldTagsToLastSection(System.Text.StringBuilder,System.Int32,System.Int32)">
+            <summary>
+            Inserts rich text bold tags around the last word in 'text'.
+            The following characters denote the start of a section: dot, slash, tab, new line.
+            </summary>
+        </member>
+        <member name="F:Kybernetik.Utils.Tab">
+            <summary>
+            4 spaces.
+            <para></para>
+            Could be '\t', but this makes it easier to copy code into websites like Stack Overflow which use 4 spaces for tabs.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.Indent(System.Text.StringBuilder,System.Int32)">
+            <summary>Appends <see cref="F:Kybernetik.Utils.Tab"/> the specified number of times.</summary>
+        </member>
+        <member name="F:Kybernetik.Utils.NewLine">
+            <summary>
+            Unity's profiler claims that each call to <see cref="P:System.Environment.NewLine"/> allocates 30 bytes of garbage
+            so we cache the value here for AppendLineConst to use.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.AppendLineConst(System.Text.StringBuilder)">
+            <summary>
+            This method allocates no garbage unlike <see cref="M:System.Text.StringBuilder.AppendLine"/> which allocates 30 bytes
+            of garbage per call for accessing <see cref="P:System.Environment.NewLine"/> (according to Unity's profiler).
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.AppendLineConst(System.Text.StringBuilder,System.String)">
+            <summary>
+            This method allocates no garbage unlike <see cref="M:System.Text.StringBuilder.AppendLine"/> which allocates 30 bytes
+            of garbage per call for accessing <see cref="P:System.Environment.NewLine"/> (according to Unity's profiler).
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.AppendLineConst(System.Text.StringBuilder,System.Object)">
+            <summary>
+            This method allocates no garbage unlike <see cref="M:System.Text.StringBuilder.AppendLine"/> which allocates 30 bytes
+            of garbage per call for accessing <see cref="P:System.Environment.NewLine"/> (according to Unity's profiler).
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.GetStringBuilder">
+            <summary>
+            Gets an available string builder from the pool.
+            Once you are done with it, give it back with <see cref="M:Kybernetik.Utils.Release(System.Text.StringBuilder)"/> or <seealso cref="M:Kybernetik.Utils.ReleaseToString(System.Text.StringBuilder)"/>
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.Release(System.Text.StringBuilder)">
+            <summary>
+            Gives a string builder back to the pool.
+            Use <see cref="M:Kybernetik.Utils.ReleaseToString(System.Text.StringBuilder)"/> if you also need its string.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.ReleaseToString(System.Text.StringBuilder)">
+            <summary>
+            Gives a string builder to the pool and returns its string.
+            Use <see cref="M:Kybernetik.Utils.Release(System.Text.StringBuilder)"/> if you don't need its string.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.Log(System.Object)">
+            <summary>Debug.Log(message) without the need to include the UnityEngine namespace.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.LogWarning(System.Object)">
+            <summary>Debug.LogWarning(message) without the need to include the UnityEngine namespace.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.LogError(System.Object)">
+            <summary>Debug.LogError(message) without the need to include the UnityEngine namespace.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.LogTemp(System.Object)">
+            <summary>Debug.Log(message) with an [Obsolete] warning so you remember to remove the call.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.LogInvalidValue``1(``0)">
+            <summary>Logs an error message stating that 'value' is not a valid T. Useful for enums.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.EditorAssertWarning(System.Boolean,System.Object)">
+            <summary>#if UNITY_EDITOR -> if (!condition) Debug.LogWarning(message).</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.EditorAssert(System.Boolean,System.Object)">
+            <summary>#if UNITY_EDITOR -> if (!condition) Debug.LogError(message).</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.EditorAssertWarning(System.Boolean,System.Func{System.Object})">
+            <summary>#if UNITY_EDITOR -> if (!condition) Debug.LogWarning(getMessage()).
+            This allows you to avoid building the message when the assertion passes.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.EditorAssert(System.Boolean,System.Func{System.Object})">
+            <summary>#if UNITY_EDITOR -> if (!condition) Debug.LogError(getMessage()).
+            This allows you to avoid building the message when the assertion passes.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.DebugLog(System.Object)">
+            <summary>#if DEBUG -> Debug.Log(message).</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.DebugLogWarning(System.Object)">
+            <summary>#if DEBUG -> Debug.LogWarning(message).</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.DebugLogError(System.Object)">
+            <summary>#if DEBUG -> Debug.LogError(message).</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.DebugAssert(System.Boolean,System.Object)">
+            <summary>#if DEBUG -> if (!condition) Debug.LogError(message).</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.DebugAssertWarning(System.Boolean,System.Object)">
+            <summary>#if DEBUG -> if (!condition) Debug.LogWarning(message).</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.DebugAssertLog(System.Boolean,System.Object)">
+            <summary>#if DEBUG -> if (!condition) Debug.Log(message).</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.LogCallerIfRestricted">
+            <summary>
+            If RESTRICT_USAGE is defined, this method will log the name of the calling method. This is useful for
+            verifying that certain methods are only used in certain contexts. For example, you might want to ensure
+            that an inefficient method or class is not used in a release build of your application.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.EditorAssertSameSize(System.Collections.ICollection,System.Collections.ICollection)">
+            <summary>Asserts that a pair of collections are not null and have the same count.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.LogErrorIfModified(System.Collections.IEnumerable,System.String)">
+            <summary>
+            Logs an error if the 'collection' is modified after calling this method.
+            <para></para>
+            One collection will be checked every update (in the editor or at runtime), and all collections will be checked when this assembly
+            is unloaded.
+            <para></para>
+            Can be cancelled by <see cref="M:Kybernetik.Utils.CancelLogErrorIfModified(System.Collections.IEnumerable)"/>.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.CancelLogErrorIfModified(System.Collections.IEnumerable)">
+            <summary>
+            Cancels a previous call to <see cref="M:Kybernetik.Utils.LogErrorIfModified(System.Collections.IEnumerable,System.String)"/>.
+            </summary>
+        </member>
+        <member name="T:Kybernetik.Utils.Timer">
+            <summary>A simple timing system that works both in the editor and at runtime using unscaled time.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.Timer.Start(System.String,System.String)">
+            <summary>Start a timer which will log the elapsed time when disposed.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.Timer.Restart">
+            <summary>Sets the current time as this timer's start time.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.Timer.GetTime">
+            <summary>Returns the amount of time that has passed since this timer was started.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.Timer.LogTime">
+            <summary>Logs the amount of time that has passed since this timer was started.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.Timer.Release">
+            <summary>Returns this timer to the pool to be reused.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.Timer.Dispose">
+            <summary>Logs the elapsed time and releases this timer.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.HSBtoRGB(System.Single,System.Single,System.Single)">
+            <summary>
+            Converts a set of HSB values to an RGB <see cref="T:UnityEngine.Color"/>.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.ColorToHex(UnityEngine.Color32)">
+            <summary>Returns a string containing the hexadecimal representation of 'color'.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.AppendColorToHex(System.Text.StringBuilder,UnityEngine.Color32)">
+            <summary>Appends the hexadecimal representation of 'color'.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.AppendColorTag(System.Text.StringBuilder,UnityEngine.Color32,System.String)">
+            <summary>Appends the a rich text color tag around 'message'.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.SetHideFlagsRecursive(UnityEngine.Transform,UnityEngine.HideFlags)">
+            <summary>
+            Sets 'transform.hideFlags' = 'flags' and does the same for all the children of 'transform'.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.GetSavePath(System.String)">
+            <summary>
+            In the editor, we save in the project folder (just outside Assets).
+            Otherwise we save in the persistent data path.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.TruncateForLabel(System.String)">
+            <summary>
+            Truncate the given string so it can be used in a GUI.Label.
+            MaxLength = 16,382.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.CombineTextures(UnityEngine.Texture,UnityEngine.Texture,System.Single)">
+            <summary>
+            Combines two textures into one. The 'top' texture is alpha-blended onto the 'bottom'.
+            </summary>
+            <param name="bottom">The base texture to start with.</param>
+            <param name="top">The texture to alpha-blend onto the 'bottom'</param>
+            <param name="border">The edges of the 'top' texture are scaled down by this value.</param>
+        </member>
+        <member name="M:Kybernetik.Utils.FindAllGameObjects``1">
+            <summary>
+            Returns a collection of all <see cref="T:UnityEngine.GameObject"/>s in the currently open scenes.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.FindAllGameObjects``1(``0)">
+            <summary>Fills an existing collection of all <see cref="T:UnityEngine.GameObject"/>s in the currently open scenes.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.EditorDelayCallOnce(UnityEditor.EditorApplication.CallbackFunction)">
+            <summary>[Editor-Only]
+            Calls <see cref="F:UnityEditor.EditorApplication.delayCall"/> -= then += 'method'.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.EditorInvokeRepeating(System.Action,System.Double)">
+            <summary>[Editor-Only]
+            Registers the specified method to be called by the editor repeatedly at roughly the specified interval.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.MoveAsset(System.String,System.String,System.Boolean)">
+            <summary>[Editor-Only]
+            Moves an asset from 'oldPath' to 'newPath' and deletes any empty directories at 'oldPath'.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.DeleteAsset(System.String,System.Boolean)">
+            <summary>[Editor-Only]
+            Deletes the specified asset. If the asset's directory is then empty, it is deleted as well (recursively).
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.DeleteEmptyDirectories(System.String)">
+            <summary>[Editor-Only]
+            Deletes the specified directory if it is empty (ignoring metadata files), then does the same recursively
+            for each parent directory. Refreshes the <see cref="T:UnityEditor.AssetDatabase"/> if anything was deleted.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.ContainsNonMetaFiles(System.String,System.String[]@)">
+            <summary>
+            [Editor-Only] Checks if the specified directory contains any files which don't end with ".meta".
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.SaveSubAssets(UnityEngine.Object,UnityEngine.Object)">
+            <summary>
+            [Editor-Only] After you save the scene object 'obj' as an asset file and load it as 'asset', this method
+            goes through all the serialized <see cref="T:UnityEngine.Object"/> fields which weren't saved and adds them
+            as sub-assets. Returns true if any sub-assets were saved.
+            <para></para>
+            For example, creating a procedural <see cref="T:UnityEngine.Mesh"/>, assigning it to a <see cref="T:UnityEngine.MeshFilter"/>, and
+            saving the object as a prefab would not save the mesh anywhere unless you call this method or
+            <see cref="M:UnityEditor.AssetDatabase.AddObjectToAsset(UnityEngine.Object,UnityEngine.Object)"/>.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.DestroySubAssets(System.String)">
+            <summary>[Editor-Only] Destroys all sub-assets which are part of the specified asset.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.SelectObject(UnityEngine.Object)">
+            <summary>
+            Selects 'target' in the Unity Editor.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.SelectAsset(System.String)">
+            <summary>
+            Selects the specified asset in the Unity Editor.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.OpenFileLocation(System.String)">
+            <summary>
+            Opens the specified path in Windows Explorer / Mac Finder / etc.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.GetExistingParent(System.String)">
+            <summary>
+            If no file or directory exists at 'path', this method looks for the first parent directory which does exist.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.LinearRescaleTo01(System.Single,System.Single,System.Single)">
+            <summary>
+            Re-scales value from the old range (oldMin to oldMax) to the new range (0 to 1).
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.LinearRescale(System.Single,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Re-scales value from the old range (oldMin to oldMax) to the new range (newMin to newMax).
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.LinearRescaleClamped(System.Single,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Re-scales value from the old range (oldMin to oldMax) to the new range (newMin to newMax) and clamps it within that range.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.CreateNewEmail(System.String,System.String,System.String)">
+            <summary>Creates a new email with the system's default email application.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.Swap``1(``0@,``0@)">
+            <summary>Swaps the references 'a' and 'b'.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.Nullify``1(``0@)">
+            <summary>
+            Sets the reference to its default value (null for reference types) and returns the original value.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.SetValue``1(``0@,``0)">
+            <summary>
+            Returns true and sets 'currentValue' if 'newValue' is different.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.SetReference``1(``0@,``0)">
+            <summary>
+            Checks and sets 'currentValue' if 'newValue' is different.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.FriendlyFullName``1(``0)">
+            <summary>Returns 'T'.'obj.ToString()'. Useful for enums.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.AppendFriendlyFullName``1(System.Text.StringBuilder,``0)">
+            <summary>Appends 'Type'.'obj.ToString()'. Useful for enums.</summary>
+        </member>
+        <member name="T:Kybernetik.Utils.Enum`1">
+            <summary>
+            Caches and simplifies access to the internals of an enum type.
+            Do not use on non-enum types.
+            </summary>
+        </member>
+        <member name="F:Kybernetik.Utils.Enum`1.Values">
+            <summary>An array of all the enum's values retrieved using <see cref="M:System.Enum.GetValues(System.Type)"/>.</summary>
+        </member>
+        <member name="F:Kybernetik.Utils.Enum`1.MaskValues">
+            <summary>An array of all the enum's values converted to unsigned longs to allow bitwise operations.</summary>
+        </member>
+        <member name="M:Kybernetik.Utils.Enum`1.GetGUIContents">
+            <summary>
+            Returns an array containing the name of each value in the enum.
+            Also includes the tooltip of any values with a <see cref="T:UnityEngine.TooltipAttribute"/>.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.GetFlags``1(``0)">
+            <summary>
+            Get a list of all the individual flags in 'value'.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.GetFlagsFull``1(``0)">
+            <summary>
+            Get a list of all the enum values contained in 'value'.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Utils.AppendFlagsFull``1(System.Text.StringBuilder,``0,System.Boolean)">
+            <summary>
+            Appends all the enum values contained in 'value'.
+            </summary>
+        </member>
+        <member name="T:Kybernetik.PreBuildAttribute">
+            <summary>
+            This attribute automatically registers a method to execute when Unity builds your project.
+            <para></para>Static methods are run once at the start of a build.
+            <para></para>Instance methods are run once for each instance of the declaring <see cref="T:UnityEngine.Component"/> attached to a
+            <see cref="T:UnityEngine.GameObject"/> in each scene being built.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.PreBuildAttribute.#ctor(System.Int32)">
+            <summary>Lowest execution time goes first. 0 is the default time.</summary>
+        </member>
+        <member name="M:Kybernetik.PreBuildAttribute.CompareTo(Kybernetik.PreBuildAttribute)">
+            <summary>Compares the <see cref="F:Kybernetik.PreBuildAttribute.ExecutionTime"/> of 'this' to 'other'.</summary>
+        </member>
+        <member name="M:Kybernetik.PreBuildAttribute.InvokePreBuild">
+            <summary>Invokes all [<see cref="T:Kybernetik.PreBuildAttribute"/>] methods.</summary>
+        </member>
+        <member name="T:Kybernetik.Reflection">
+            <summary>A variety of utility methods relating to reflection.</summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.OneObject(System.Object)">
+            <summary>
+            Returns <see cref="T:System.Object"/>[1] { obj }.
+            <para></para>
+            The array is kept in a field marked with [<see cref="T:System.ThreadStaticAttribute"/>], so it is thread safe
+            but cannot be used recursively within a single thread.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.TwoObjects(System.Object,System.Object)">
+            <summary>
+            Returns <see cref="T:System.Object"/>[2] { obj0, obj1 }.
+            <para></para>
+            The array is kept in a field marked with [<see cref="T:System.ThreadStaticAttribute"/>], so it is thread safe
+            but cannot be used recursively within a single thread.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.OneType(System.Type)">
+            <summary>
+            Returns <see cref="T:System.Type"/>[1] { type }.
+            <para></para>
+            The array is kept in a field marked with [<see cref="T:System.ThreadStaticAttribute"/>], so it is thread safe
+            but cannot be used recursively within a single thread.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.TwoTypes(System.Type,System.Type)">
+            <summary>
+            Returns <see cref="T:System.Type"/>[2] { type0, type1 }.
+            <para></para>
+            The array is kept in a field marked with [<see cref="T:System.ThreadStaticAttribute"/>], so it is thread safe
+            but cannot be used recursively within a single thread.
+            </summary>
+        </member>
+        <member name="T:Kybernetik.Reflection.Assemblies">
+            <summary>A variety of utility methods relating to the currently loaded assemblies and iterating through them.</summary>
+        </member>
+        <member name="F:Kybernetik.Reflection.Assemblies.All">
+            <summary>A list of all currently loaded assemblies. Do not modify.</summary>
+        </member>
+        <member name="F:Kybernetik.Reflection.Assemblies.UnityCSharpRuntime">
+            <summary>[Editor-Only] A reference to the assembly in which Unity compiles your runtime scripts.</summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.Assemblies.LogAllDependants">
+            <summary>
+            Logs all currently loaded assemblies and any others which are dependant on them.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.Assemblies.GetTypes(System.Reflection.Assembly)">
+            <summary>
+            Returns an array of all types in the specified assembly.
+            The array is cached to avoid garbage collection.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.Assemblies.ForEachType(System.Reflection.Assembly,System.Action{System.Type})">
+            <summary>
+            Calls the specified method once for each type in the specified assembly.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.Assemblies.ForEachDependantAssembly(System.Reflection.Assembly,System.Action{System.Reflection.Assembly})">
+            <summary>
+            Calls the specified method once for each loaded assembly that references the specified assembly (including itself).
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.Assemblies.ForEachTypeInDependantAssemblies(System.Reflection.Assembly,System.Action{System.Type})">
+            <summary>
+            Calls the specified method once for each type in each loaded assembly that references the specified assembly.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.Assemblies.FindType(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Tries to find a type with the specified name in any currently loaded assembly.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.Assemblies.IsDependantOn(System.Reflection.Assembly,System.Reflection.Assembly)">
+            <summary>
+            Checks if 'assembly' has a reference to 'dependency'.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.Is(System.Type,System.Type)">
+            <summary>Checks if 'type' is descended from 'baseType' (or implements it if it's an interface).</summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.IsSubclassOfGenericDefinition(System.Type,System.Type,System.Type[]@)">
+            <summary>Checks if 'type' is descended from 'generic' (where 'generic' is a generic type definition).</summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.IsSubclassOfGenericDefinition(System.Type,System.Type)">
+            <summary>Checks if 'type' is descended from 'generic' (where 'generic' is a generic type definition).</summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.IsNestedIn(System.Type,System.Type)">
+            <summary>Checks if 'type' is nested inside 'outerType'.</summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.HasParameterlessConstructor(System.Type,System.Reflection.BindingFlags)">
+            <summary>Checks if 'type' has a parameterless constructor.</summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.HasDefaultConstructor(System.Type)">
+            <summary>Checks if 'type' has a public parameterless constructor.</summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.IsObsolete(System.Reflection.ICustomAttributeProvider,System.Boolean)">
+            <summary>Checks if 'target' has an [<see cref="T:System.ObsoleteAttribute"/>].</summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.HasGetAndSet(System.Reflection.PropertyInfo,System.Boolean)">
+            <summary>Checks if 'property' has both a getter and setter.</summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.CompareNamespaceThenName(System.Type,System.Type)">
+            <summary>
+            Compares types by namespace, and if they are in the same namespace then compares them by name.
+            </summary>
+        </member>
+        <member name="F:Kybernetik.Reflection.AnyAccessBindings">
+            <summary><see cref="T:System.Reflection.BindingFlags"/> for any access modifiers.</summary>
+        </member>
+        <member name="F:Kybernetik.Reflection.InstanceBindings">
+            <summary><see cref="T:System.Reflection.BindingFlags"/> for instance access modifiers.</summary>
+        </member>
+        <member name="F:Kybernetik.Reflection.StaticBindings">
+            <summary><see cref="T:System.Reflection.BindingFlags"/> for static access modifiers.</summary>
+        </member>
+        <member name="F:Kybernetik.Reflection.PublicStaticBindings">
+            <summary><see cref="T:System.Reflection.BindingFlags"/> for public and static.</summary>
+        </member>
+        <member name="F:Kybernetik.Reflection.PublicInstanceBindings">
+            <summary><see cref="T:System.Reflection.BindingFlags"/> for public and instance.</summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.HasFlags(System.Reflection.BindingFlags,System.Reflection.BindingFlags)">
+            <summary>Checks if 'bindings' contains all the flags in 'flags'.</summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.ForEachType(System.Action{System.Type})">
+            <summary>
+            Calls the specified method once for each type in every currently loaded assembly.
+            <para></para>
+            Most situations where you want to do something for each type are in reference to something specific.
+            For example: when searching for every type with a certain attribute, you only need to look in assemblies
+            that reference the assembly containing the attribute so you should instead use
+            <see cref="T:Kybernetik.Reflection"/>.<see cref="M:Kybernetik.Reflection.Assemblies.ForEachTypeInDependantAssemblies(System.Reflection.Assembly,System.Action{System.Type})"/>.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.GetCustomAttribute``1(System.Reflection.ICustomAttributeProvider,System.Boolean)">
+            <summary>
+            Gets a single custom attribute of type T and casts it.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.ForEachCustomAttribute``1(System.Reflection.ICustomAttributeProvider,System.Action{``0},System.Boolean)">
+            <summary>
+            Calls 'method' once for each attribute of the specified type on 'target'.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.GetDerivedTypes(System.Type,System.Boolean)">
+            <summary>
+            Gets all non-abstract types in the currently loaded assemblies which derive from the specified base type
+            (including the base type itself if it isn't abstract).
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.GetDerivedTypes(System.Type,System.Collections.Generic.ICollection{System.Type},System.Boolean)">
+            <summary>
+            Gets all non-abstract types in the currently loaded assemblies which derive from the specified base type
+            (including the base type itself if it isn't abstract).
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.GetImplementingTypes(System.Type)">
+            <summary>
+            Gets all non-abstract types in the currently loaded assemblies which have a parameterless constructor and
+            implement the specified interface.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.GetAttributedMethods``1(System.Reflection.BindingFlags,System.Collections.Generic.List{``0},System.Collections.Generic.List{System.Reflection.MethodInfo})">
+            <summary>Get all methods with the specified attribute in every type in the currently loaded assemblies.</summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.GetAttributedMethods``1(System.Type,System.Reflection.BindingFlags,System.Collections.Generic.List{``0},System.Collections.Generic.List{System.Reflection.MethodInfo})">
+            <summary>Get all methods with the specified attribute in 'type'.</summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.GetAttributedFields``1(System.Type,System.Reflection.BindingFlags,System.Collections.Generic.List{``0},System.Collections.Generic.List{System.Reflection.FieldInfo})">
+            <summary>Get all fields with the specified attribute in 'type'.</summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.GetAttributedProperties``1(System.Type,System.Reflection.BindingFlags,System.Collections.Generic.List{``0},System.Collections.Generic.List{System.Reflection.PropertyInfo})">
+            <summary>Get all properties with the specified attribute in 'type'.</summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.GetMethod(System.Type,System.String,System.Reflection.BindingFlags,System.Type[],System.Type,System.Boolean)">
+            <summary>
+            Gets a <see cref="T:System.Reflection.MethodInfo"/> for a method called 'name' in 'type' with the correct parameter types and return type.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.GetDelegate``1(System.Reflection.MethodInfo)">
+            <summary>
+            Creates a delegate of the specified type from 'method'.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.GetDelegate``1(System.Reflection.MethodInfo,``0@)">
+            <summary>
+            Creates a delegate of the specified type from 'method'.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.TryGetPropertyGetter``1(System.Type,System.String,System.Func{``0}@)">
+            <summary>
+            Tries to get the getter method of a property and create a delegate from it.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.GetCallingMethod(System.Int32)">
+            <summary>
+            Returns the <see cref="T:System.Reflection.MethodBase"/> for the calling method.
+            </summary>
+            <param name="skipFrames">The number of stack frames to skip: 1 returns the name of the method containing
+            the GetCallingMethod call, 2 returns the caller of that method, and so on.</param>
+        </member>
+        <member name="M:Kybernetik.Reflection.GetCallingTypePrefix(System.Int32)">
+            <summary>Returns "Namespace.CallingType.".</summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.DeepToString(System.Object)">
+            <summary>Builds a string containing the values of each of the specified object's fields.</summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.AppendDeepToString(System.Text.StringBuilder,System.Int32,System.Object,System.Int32)">
+            <summary>Builds a string containing the values of each of the specified object's fields.</summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.ToAccessModifier(System.Reflection.BindingFlags)">
+            <summary>Returns a description of the access modifier associated with 'bindings'</summary>
+        </member>
+        <member name="M:Kybernetik.Reflection.GetInheritanceModifier(System.Type,System.String,System.Type[])">
+            <summary>
+            Returns null, "override" or "new" as appropriate for a method called 'methodName' in a child of 'baseType'.
+            </summary>
+        </member>
+        <member name="T:Kybernetik.IDependant`1">
+            <summary>
+            Indicates that a type can depend on other objects.
+            Used by <see cref="M:Kybernetik.Utils.TopologicalSort``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{Kybernetik.IDependant{``0}},System.Collections.Generic.IEqualityComparer{``0},System.Boolean)"/>.
+            </summary>
+        </member>
+        <member name="P:Kybernetik.IDependant`1.Dependencies">
+            <summary>Everything that this object is dependant on. Return null if there are none.</summary>
+        </member>
+        <member name="T:Kybernetik.TypeDependencyAttribute">
+            <summary>
+            Indicates that a member depends on a type (or types).
+            Used by <see cref="M:Kybernetik.Utils.TopologicalSort(System.Collections.Generic.IEnumerable{System.Type},System.Boolean)"/>.
+            </summary>
+        </member>
+        <member name="F:Kybernetik.TypeDependencyAttribute.Dependencies">
+            <summary>The types which the attributed member is dependant on.</summary>
+        </member>
+        <member name="M:Kybernetik.TypeDependencyAttribute.#ctor(System.Type[])">
+            <summary>Constructs a new <see cref="T:Kybernetik.TypeDependencyAttribute"/> with the specified dependencies.</summary>
+        </member>
+        <member name="M:Kybernetik.TypeDependencyAttribute.GetDependencies(System.Reflection.MemberInfo)">
+            <summary>Gets the types which the specified member is dependant on (if any).</summary>
+        </member>
+        <member name="M:Kybernetik.TypeDependencyAttribute.GetDependencies(System.Object)">
+            <summary>Gets the types which the specified object is dependant on based on its type (if any).</summary>
+        </member>
+        <member name="M:Kybernetik.TypeDependencyAttribute.HasDependency(System.Type,System.Type)">
+            <summary>Checks if 'dependant' is dependant on 'dependency'.</summary>
+        </member>
+        <member name="M:Kybernetik.TypeDependencyAttribute.HasDependency(System.Object,System.Type)">
+            <summary>Checks if 'dependant' is dependant on 'dependency'.</summary>
+        </member>
+        <member name="T:Kybernetik.ObjectPickerField">
+            <summary>[Editor-Only] Allows you to draw GUI fields which can be used to pick an object from a list.</summary>
+        </member>
+        <member name="M:Kybernetik.ObjectPickerField.Draw``1(UnityEngine.Rect,``0,System.Collections.Generic.List{``0},System.Int32,System.Func{``0,UnityEngine.GUIContent},System.Func{``0},UnityEngine.GUIStyle)">
+            <summary>Draws a field which lets you pick an object from a list and returns the selected object.</summary>
+        </member>
+        <member name="M:Kybernetik.ObjectPickerField.Draw``1(UnityEngine.Rect,``0,System.Collections.Generic.List{``0},System.Int32,System.Func{``0,UnityEngine.GUIContent},System.Func{``0})">
+            <summary>Draws a field which lets you pick an object from a list and returns the selected object.</summary>
+        </member>
+        <member name="M:Kybernetik.ObjectPickerField.DrawLayout``1(``0,System.Collections.Generic.List{``0},System.Int32,System.Func{``0,UnityEngine.GUIContent},System.Func{``0},UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>Draws a field (using GUILayout) which lets you pick an object from a list and returns the selected object.</summary>
+        </member>
+        <member name="M:Kybernetik.ObjectPickerField.DrawLayout``1(``0,System.Collections.Generic.List{``0},System.Int32,System.Func{``0,UnityEngine.GUIContent},System.Func{``0},UnityEngine.GUILayoutOption[])">
+            <summary>Draws a field (using GUILayout) which lets you pick an object from a list and returns the selected object.</summary>
+        </member>
+        <member name="M:Kybernetik.ObjectPickerField.DrawEditorLayout``1(UnityEngine.GUIContent,``0,System.Collections.Generic.List{``0},System.Int32,System.Func{``0,UnityEngine.GUIContent},System.Func{``0},UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>
+            Draws a field (as an inspector field using GUILayout) which lets you pick an object from a list and returns
+            the selected object.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.ObjectPickerField.DrawEditorLayout``1(UnityEngine.GUIContent,``0,System.Collections.Generic.List{``0},System.Int32,System.Func{``0,UnityEngine.GUIContent},System.Func{``0},UnityEngine.GUILayoutOption[])">
+            <summary>
+            Draws a field (as an inspector field using GUILayout) which lets you pick an object from a list and returns
+            the selected object.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.ObjectPickerField.DrawTypeField(UnityEngine.Rect,System.Type,System.Collections.Generic.List{System.Type},System.Int32,UnityEngine.GUIStyle)">
+            <summary>Draws a field which lets you pick a <see cref="T:System.Type"></see> from a list and returns the selected type.</summary>
+        </member>
+        <member name="M:Kybernetik.ObjectPickerField.DrawAssetTypeField(UnityEngine.Rect,System.Type,System.Collections.Generic.List{System.Type},System.Int32,UnityEngine.GUIStyle)">
+            <summary>Draws a field which lets you pick an asset <see cref="T:System.Type"></see> from a list and returns the selected type.</summary>
+        </member>
+        <member name="M:Kybernetik.ObjectPickerField.RemoveDuplicateSuggestions``1(System.Collections.Generic.List{``0},System.Int32)">
+            <summary>
+            Removes any duplicates of the first few elements in 'options' (from 0 to 'suggestions') from anywhere later
+            in the list.
+            </summary>
+        </member>
+        <member name="T:Kybernetik.UnityConsole">
+            <summary>
+            Allows for easy access to some parts of the Unity Editor Console Window.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.UnityConsole.Clear">
+            <summary>Clears all log entries from the Unity Console Window.</summary>
+        </member>
+        <member name="M:Kybernetik.UnityConsole.HasCompileError">
+            <summary>Checks if the Unity Editor Console Window currently contains any compile errors.</summary>
+        </member>
+        <member name="T:Kybernetik.UnityScripts">
+            <summary>A variety of utility methods relating to script assets in Unity.</summary>
+        </member>
+        <member name="M:Kybernetik.UnityScripts.GetScript(System.Type)">
+            <summary>
+            Tries to get the script asset containing 'type'.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.UnityScripts.GetPath(System.Type)">
+            <summary>
+            Tries to get the path of the script asset containing 'type'.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.UnityScripts.GetExecutionTime(System.Type)">
+            <summary>
+            Tries to get the execution time of the script asset containing 'type'.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.UnityScripts.Define(System.String)">
+            <summary>
+            Defines the specified symbol for the current build platform in the Unity Project Settings.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.UnityScripts.Define(System.String,UnityEditor.BuildTargetGroup)">
+            <summary>
+            Defines the specified symbol for the specified platform in the Unity Project Settings.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.UnityScripts.Undefine(System.String)">
+            <summary>
+            Undefines the specified symbol from all build platforms in the Unity Project Settings.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.UnityScripts.Undefine(System.String,UnityEditor.BuildTargetGroup)">
+            <summary>
+            Undefines the specified symbol from the specified platform in the Unity Project Settings.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.UnityScripts.IsDefined(System.String)">
+            <summary>
+            Checks if the specified symbol is defined for the current build platform in the Unity Project Settings.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.UnityScripts.IsDefined(System.String,UnityEditor.BuildTargetGroup)">
+            <summary>
+            Checks if the specified symbol is defined for the specified platform in the Unity Project Settings.
+            </summary>
+        </member>
+        <member name="M:Kybernetik.UnityScripts.IsDefined(System.String,System.String,System.Int32@)">
+            <summary>
+            Checks if 'defines' contains 'symbol', separated from other symbols by a semicolon.
+            </summary>
+        </member>
+    </members>
+</doc>

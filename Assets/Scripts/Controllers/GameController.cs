@@ -1,45 +1,44 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using Random = System.Random;
 
 public class GameController : MonoBehaviour {
-
     public int numberOfSystems = 100;
     public WorldUI radar;
-    Galaxy g;
-    StarSystem current;
-    [SerializeField]
-    private PlayerShipController player;
-	// Use this for initialization
-	void Awake () {
+    private Galaxy g;
+    private StarSystem current;
+
+    [SerializeField] private PlayerShipController player;
+
+    // Use this for initialization
+    private void Awake() {
         g = new Galaxy(numberOfSystems);
         LoadSystem(g.home);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    }
 
-    void LoadSystem(StarSystem star) {
+    // Update is called once per frame
+    private void Update() {
+    }
 
-        if (current != null) {
+    private void LoadSystem(StarSystem star) {
+        if (current != null)
+        {
             current.Unload();
             radar.Clear();
         }
 
         current = star;
         current.Load();
-        foreach (GameObject obj in current) {
-            if (obj == null) continue;
-            radar.AddTrackingObject(obj);
+
+        foreach (var obj in current)
+        {
+            if (obj != null) radar.AddTrackingObject(obj as GameObject);
         }
 
-        float angle = (float) (new System.Random().NextDouble()) * 360;
-        int radius = 200;
+        float angle = (float) new Random().NextDouble() * 360;
+        var radius = 200;
 
-        int x = (int)(radius * Mathf.Cos(angle));
-        int y = (int)(radius * Mathf.Sin(angle));
+        var x = (int) (radius * Mathf.Cos(angle));
+        var y = (int) (radius * Mathf.Sin(angle));
 
         player.transform.position = new Vector3(x, y, 0);
     }
@@ -47,5 +46,4 @@ public class GameController : MonoBehaviour {
     public void Relocate() {
         LoadSystem(g.GetRandomStar());
     }
-
 }
