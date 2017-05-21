@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿namespace Model {
+    class EmptyOrbital : Orbital {
 
-class EmptyOrbital : Orbital {
+        public EmptyOrbital(int seed) : base(seed) { }
 
-    public EmptyOrbital(int seed) : base(seed) { }
-
-    public override void Load() {}
+        public override void Load() {}
+    }
 }

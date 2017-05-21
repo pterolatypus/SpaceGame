@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Model;
+using UnityEngine;
 using Random = System.Random;
 
 public class GameController : MonoBehaviour {
@@ -20,8 +21,7 @@ public class GameController : MonoBehaviour {
     }
 
     private void LoadSystem(StarSystem star) {
-        if (current != null)
-        {
+        if (current != null) {
             current.Unload();
             radar.Clear();
         }
@@ -29,8 +29,7 @@ public class GameController : MonoBehaviour {
         current = star;
         current.Load();
 
-        foreach (var obj in current)
-        {
+        foreach (object obj in current) {
             if (obj != null) radar.AddTrackingObject(obj as GameObject);
         }
 

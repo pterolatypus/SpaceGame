@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿namespace Model {
+	public interface Interactable {
 
-public interface Interactable {
+		void Interact(PlayerShipController player);
+		string GetInteractionText();
 
-	void Interact(PlayerShipController player);
-    string GetInteractionText();
-
+	}
 }
