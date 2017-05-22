@@ -53,8 +53,8 @@ namespace Controllers {
             float angle = (float) new Random().NextDouble() * 360;
             const int radius = 200;
 
-            var x = (int) (radius * Mathf.Cos(angle));
-            var y = (int) (radius * Mathf.Sin(angle));
+            var x = (int)(radius * Mathf.Cos(angle));
+            var y = (int)(radius * Mathf.Sin(angle));
 
             _player.transform.position = new Vector3(x, y, 0);
         }

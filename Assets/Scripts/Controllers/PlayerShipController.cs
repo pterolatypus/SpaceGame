@@ -29,8 +29,8 @@ namespace Controllers {
 
         #region Public Methods
 
-        internal void EnableControls(bool bEnable) {
-            _controls = bEnable;
+        internal void EnableControls(bool enabled) {
+            _controls = enabled;
         }
 
         #endregion Public Methods
@@ -46,7 +46,7 @@ namespace Controllers {
 
             float curSpd = GetComponent<Rigidbody2D>().velocity.magnitude;
             _maxSpeed = Mathf.Max(curSpd, _maxSpeed);
-            float animSpeed = AnimSpeedMin + curSpd / _maxSpeed * (AnimSpeedMax - AnimSpeedMin);
+            float animSpeed = AnimSpeedMin + (curSpd / _maxSpeed * (AnimSpeedMax - AnimSpeedMin));
             _anim.SetFloat("animSpeed", animSpeed);
 
             if (Input.GetButtonDown("Relocate") && _controls) {

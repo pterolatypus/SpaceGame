@@ -47,7 +47,7 @@ namespace Controllers {
 
             Vector3 target = Player.transform.position - new Vector3(0, 0, 10);
             transform.position = Vector3.SmoothDamp(transform.position, target, ref _cameraVelocity, CameraFollowDelay);
-            _camera.orthographicSize = 5f + _cameraVelocity.magnitude * CameraZoomFactor;
+            _camera.orthographicSize = 5f + (_cameraVelocity.magnitude * CameraZoomFactor);
         }
 
         private void Start() {
