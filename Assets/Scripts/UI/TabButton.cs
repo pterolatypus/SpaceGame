@@ -1,22 +1,30 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace UI {
     public class TabButton : MonoBehaviour {
 
-        public InteractionUI window { get; private set; }
+        #region Private Fields
+
+        [FormerlySerializedAs("textObject")][SerializeField] private Text textObject;
+
+        #endregion Private Fields
+
+        #region Public Properties
+
         public InteractionTab tab { get; private set; }
-        [SerializeField]
-        private Text textObject;
 
         public string text {
-            get {
-                return textObject.text;
-            }
-            set {
-                textObject.text = value;
-            }
+            get { return textObject.text; }
+            set { textObject.text = value; }
         }
+
+        public InteractionUI window { get; private set; }
+
+        #endregion Public Properties
+
+        #region Public Methods
 
         public void Bind(InteractionUI window, InteractionTab tab) {
             this.window = window;
@@ -26,6 +34,8 @@ namespace UI {
         public void SelectTab() {
             window.SetActiveTab(tab);
         }
+
+        #endregion Public Methods
 
     }
 }
