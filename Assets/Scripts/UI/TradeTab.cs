@@ -9,7 +9,7 @@ namespace UI {
             source = interaction;
         }
 
-        public override string GetTitle() {
+        internal override string GetTitle() {
             return "Trade";
         }
     }

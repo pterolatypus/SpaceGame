@@ -20,7 +20,7 @@ namespace UI {
             _source = interaction;
         }
 
-        public override string GetTitle() {
+        internal override string GetTitle() {
             return "Info";
         }
 

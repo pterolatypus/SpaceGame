@@ -104,8 +104,8 @@ namespace Model {
 
             var window = Object.Instantiate(Resources.Load("Prefabs/UI/InteractionWindow") as GameObject).GetComponent<InteractionUI>();
             window.transform.SetParent(GameObject.Find("ScreenUI").transform, false);
-            window.player = player;
-            window.source = this;
+            window.Player = player;
+            window.Source = this;
 
             var t = (RectTransform) window.transform;
             t.offsetMax = Vector2.zero;
