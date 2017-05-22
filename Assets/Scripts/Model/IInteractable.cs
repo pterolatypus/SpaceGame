@@ -1,10 +1,15 @@
 ﻿using Controllers;
 
 namespace Model {
-	internal interface IInteractable {
+    internal interface IInteractable {
 
-		void Interact(PlayerShipController player);
-		string GetInteractionText();
+        #region Public Methods
 
-	}
+        string GetInteractionText();
+
+        void Interact(PlayerShipController player);
+
+        #endregion Public Methods
+
+    }
 }
