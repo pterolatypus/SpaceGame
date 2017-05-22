@@ -4,7 +4,7 @@ using Controllers;
 using UnityEngine;
 
 namespace Model {
-    public class Planetoid : Orbital, Interactable {
+    public class Planetoid : Orbital, IInteractable {
 
         public struct PlanetType {
             public string name { get; private set; }

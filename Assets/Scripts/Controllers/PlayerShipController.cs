@@ -1,81 +1,110 @@
-﻿using Model;
+﻿using JetBrains.Annotations;
+using Model;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Controllers {
     public class PlayerShipController : MonoBehaviour {
-        Rigidbody2D rb;
-        Animator anim;
-        public float thrust = 1f;
-        public float boostFactor = 4;
-        private float animSpeedMin = 0.5f, animSpeedMax = 2f;
-        private float maxSpeed = 1f;
-        [SerializeField] private Text txtInteract;
-        private Interactable interactionTarget;
-        private bool controls = true;
 
-        // Use this for initialization
-        void Start() {
-            rb = GetComponent<Rigidbody2D>();
-            anim = GetComponent<Animator>();
+        #region Public Fields
+
+        [FormerlySerializedAs("boostFactor")] public float BoostFactor = 4;
+        [FormerlySerializedAs("thrust")] public float Thrust = 1f;
+
+        #endregion Public Fields
+
+        #region Private Fields
+
+        private const float AnimSpeedMax = 2f;
+        private const float AnimSpeedMin = 0.5f;
+        private Animator _anim;
+        private bool _controls = true;
+        private IInteractable _interactionTarget;
+        private float _maxSpeed = 1f;
+        private Rigidbody2D _rb;
+        [FormerlySerializedAs("txtInteract")] [SerializeField] private Text _txtInteract;
+
+        #endregion Private Fields
+
+        #region Public Methods
+
+        internal void EnableControls(bool bEnable) {
+            _controls = bEnable;
         }
 
-        // Update is called once per frame
-        void Update() {
-            Vector3 cursorPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            cursorPos.z = 0;
-            Vector3 dir = cursorPos - transform.position;
-            if (controls) {
-                transform.up = dir;
-            }
-            if (Input.GetButtonDown("Interact") && controls && interactionTarget != null) {
-                interactionTarget.Interact(this);
-            }
-        }
+        #endregion Public Methods
+
+        #region Private Methods
 
         private void FixedUpdate() {
-            anim.SetBool("shipIsMoving", Input.GetButton("Forward") && controls);
-            float thrust = (Input.GetButton("Boost")) ? this.thrust * boostFactor : this.thrust;
-            if (Input.GetButton("Forward") && controls) {
-                rb.AddForce(thrust * transform.up);
+            _anim.SetBool("shipIsMoving", Input.GetButton("Forward") && _controls);
+            float thrust = Input.GetButton("Boost") ? Thrust * BoostFactor : Thrust;
+            if (Input.GetButton("Forward") && _controls) {
+                _rb.AddForce(thrust * transform.up);
             }
 
             float curSpd = GetComponent<Rigidbody2D>().velocity.magnitude;
-            maxSpeed = Mathf.Max(curSpd, maxSpeed);
-            float animSpeed = animSpeedMin + (curSpd / maxSpeed) * (animSpeedMax - animSpeedMin);
-            anim.SetFloat("animSpeed", animSpeed);
+            _maxSpeed = Mathf.Max(curSpd, _maxSpeed);
+            float animSpeed = AnimSpeedMin + curSpd / _maxSpeed * (AnimSpeedMax - AnimSpeedMin);
+            _anim.SetFloat("animSpeed", animSpeed);
 
-            if (Input.GetButtonDown("Relocate") && controls) {
+            if (Input.GetButtonDown("Relocate") && _controls) {
                 //GameObject.Find("GameController").GetComponent<GameController>().Relocate();
             }
         }
 
-        void OnTriggerEnter2D(Collider2D other) {
-            if (other.gameObject.GetComponent<WorldOrbital>().Source is Interactable) {
-                SetInteractionTarget((Interactable) other.gameObject.GetComponent<WorldOrbital>().Source);
+        private void OnTriggerEnter2D(Collider2D other) {
+            var collisionOrbital = other.gameObject.GetComponent<WorldOrbital>();
+            Orbital orbitalSource = collisionOrbital.Source;
+            var interactableSource = orbitalSource as IInteractable;
+
+            if (interactableSource != null) {
+                SetInteractionTarget(interactableSource);
             }
         }
 
-        void OnTriggerExit2D(Collider2D other) {
-            if (other.gameObject.GetComponent<WorldOrbital>().Source is Interactable) {
+        private void OnTriggerExit2D(Collider2D other) {
+            var collisionOrbital = other.gameObject.GetComponent<WorldOrbital>();
+            Orbital orbitalSource = collisionOrbital.Source;
+            var interactableSource = orbitalSource as IInteractable;
+
+            if (interactableSource != null) {
                 SetInteractionTarget(null);
             }
         }
 
-        private void SetInteractionTarget(Interactable interactable) {
-            interactionTarget = interactable;
-            if (interactionTarget == null) {
-                txtInteract.gameObject.SetActive(false);
+        private void SetInteractionTarget([CanBeNull] IInteractable interactable) {
+            _interactionTarget = interactable;
+            if (_interactionTarget == null) {
+                _txtInteract.gameObject.SetActive(false);
             }
             else {
-                string text = interactable.GetInteractionText();
-                txtInteract.text = text;
-                txtInteract.gameObject.SetActive(true);
+                _txtInteract.text = _interactionTarget.GetInteractionText();
+                _txtInteract.gameObject.SetActive(true);
             }
         }
 
-        public void EnableControls(bool bEnable) {
-            controls = bEnable;
+        // Use this for initialization
+        private void Start() {
+            _rb = GetComponent<Rigidbody2D>();
+            _anim = GetComponent<Animator>();
         }
+
+        // Update is called once per frame
+        private void Update() {
+            Vector3 cursorPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            cursorPos.z = 0;
+            Vector3 dir = cursorPos - transform.position;
+            if (_controls) {
+                transform.up = dir;
+            }
+            if (Input.GetButtonDown("Interact") && _controls && _interactionTarget != null) {
+                _interactionTarget.Interact(this);
+            }
+        }
+
+        #endregion Private Methods
+
     }
 }

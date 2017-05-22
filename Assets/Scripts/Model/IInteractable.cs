@@ -1,7 +1,7 @@
 ﻿using Controllers;
 
 namespace Model {
-	public interface Interactable {
+	internal interface IInteractable {
 
 		void Interact(PlayerShipController player);
 		string GetInteractionText();

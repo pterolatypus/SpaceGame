@@ -1,18 +1,25 @@
 ﻿using Model;
 
 namespace Controllers {
-	public class WorldOrbital : MonoBehaviour {
+    public class WorldOrbital : MonoBehaviour {
 
-		public Orbital Source { get; set; }
+        #region Public Properties
 
-		// Use this for initialization
-		void Start () {
-		
-		}
-	
-		// Update is called once per frame
-		void Update () {
-		
-		}	
-	}
+        internal Orbital Source { get; set; }
+
+        #endregion Public Properties
+
+        #region Private Methods
+
+        // Use this for initialization
+        private void Start() {
+        }
+
+        // Update is called once per frame
+        private void Update() {
+        }
+
+        #endregion Private Methods
+
+    }
 }
