@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class WorldPlanetoid : WorldOrbital {
+﻿namespace Controllers {
+    public class WorldPlanetoid : WorldOrbital {
 
 
 
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Controllers;
 using JetBrains.Annotations;
 using UnityEngine;
 using Random = System.Random;
@@ -70,7 +71,7 @@ namespace Model {
 
         public IEnumerator<GameObject> GetEnumerator() {
             foreach (Orbital orbital in _satellites) {
-                yield return orbital.gameObject;
+                if (orbital.gameObject != null) yield return orbital.gameObject;
             }
         }
 

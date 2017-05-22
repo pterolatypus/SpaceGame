@@ -1,19 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Model;
-using UnityEngine;
+﻿using Model;
 
-public class WorldOrbital : MonoBehaviour {
+namespace Controllers {
+	public class WorldOrbital : MonoBehaviour {
 
-    public Orbital Source { get; set; }
+		public Orbital Source { get; set; }
 
-	// Use this for initialization
-	void Start () {
+		// Use this for initialization
+		void Start () {
 		
-	}
+		}
 	
-	// Update is called once per frame
-	void Update () {
+		// Update is called once per frame
+		void Update () {
 		
-    }	
+		}	
+	}
 }
