@@ -1,8 +1,11 @@
-﻿namespace Model {
-    public partial class TradeInteraction {
+﻿using System;
 
-        #region Public Structs
+namespace Model {
+    internal partial class TradeInteraction {
 
+        #region Internal Structs
+
+        [Serializable]
         internal struct Commodity {
 
             #region Public Properties
@@ -25,7 +28,7 @@
 
         }
 
-        #endregion Public Structs
+        #endregion Internal Structs
 
     }
 }

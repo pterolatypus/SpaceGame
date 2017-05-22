@@ -3,23 +3,22 @@ using UI;
 using UnityEngine;
 using Random = System.Random;
 
-namespace Model
-{
-    public partial class TradeInteraction : OrbitalInteraction {
+namespace Model {
+    internal partial class TradeInteraction : OrbitalInteraction {
 
         #region Private Fields
 
         private static readonly GameObject Prefab = (GameObject) Resources.Load("Prefabs/UI/TradeTab");
 
-        private static readonly Commodity[] _tradeGoods = {
+        private static readonly List<Commodity> _tradeGoods = new List<Commodity> {
             new Commodity("Food", new[] {0f, 1f, -0.6f, -0.4f}, 10f),
             new Commodity("Water", new[] {0f, 1f, -0.6f, -0.4f}, 8f),
             new Commodity("Metal", new[] {0f, -0.7f, 1f, -0.3f}, 30f),
             new Commodity("Electronics", new[] {0f, -0.3f, -0.7f, 1f}, 80f)
         };
 
-        private readonly float _minSf = 0.8f;
-        private readonly float _maxSf = 1.2f;
+        private const float _minSf = 0.8f;
+        private const float _maxSf = 1.2f;
         private readonly Random _rand;
 
         private List<CommodityRecord> _records;
