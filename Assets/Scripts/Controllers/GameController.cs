@@ -1,36 +1,55 @@
-﻿using Model;
+﻿using System.Linq;
+using JetBrains.Annotations;
+using Model;
 using UnityEngine;
 using Random = System.Random;
 
 public class GameController : MonoBehaviour {
-    public int numberOfSystems = 100;
-    public WorldUI radar;
-    private Galaxy g;
-    private StarSystem current;
 
-    [SerializeField] private PlayerShipController player;
+    #region Public Fields
+
+    public int NumberOfSystems = 100;
+    public WorldUI Radar;
+
+    #endregion Public Fields
+
+    #region Private Fields
+
+    private StarSystem _currentStarSystem;
+    private Galaxy _galaxy;
+    [SerializeField] private PlayerShipController _player;
+
+    #endregion Private Fields
+
+    #region Public Methods
+
+    public void Relocate() {
+        LoadSystem(_galaxy.GetRandomStar());
+    }
+
+    #endregion Public Methods
+
+    #region Private Methods
 
     // Use this for initialization
     private void Awake() {
-        g = new Galaxy(numberOfSystems);
-        LoadSystem(g.home);
-    }
-
-    // Update is called once per frame
-    private void Update() {
+        _galaxy = new Galaxy(NumberOfSystems);
+        LoadSystem(_galaxy.home);
     }
 
     private void LoadSystem(StarSystem star) {
-        if (current != null) {
-            current.Unload();
-            radar.Clear();
+        if (_currentStarSystem != null) {
+            _currentStarSystem.Unload();
+            Radar.Clear();
         }
 
-        current = star;
-        current.Load();
+        _currentStarSystem = star;
+        _currentStarSystem.Load();
 
-        foreach (GameObject obj in current) {
-            radar.AddTrackingObject(obj);
+        foreach (GameObject obj in _currentStarSystem) {
+            if (obj != null) {
+                Radar.AddTrackingObject(obj);
+            }
         }
 
         float angle = (float) new Random().NextDouble() * 360;
@@ -39,10 +58,13 @@ public class GameController : MonoBehaviour {
         var x = (int) (radius * Mathf.Cos(angle));
         var y = (int) (radius * Mathf.Sin(angle));
 
-        player.transform.position = new Vector3(x, y, 0);
+        _player.transform.position = new Vector3(x, y, 0);
     }
 
-    public void Relocate() {
-        LoadSystem(g.GetRandomStar());
+    // Update is called once per frame
+    private void Update() {
     }
+
+    #endregion Private Methods
+
 }

@@ -4,31 +4,31 @@ using UnityEngine;
 
 public class WorldUI : MonoBehaviour {
 
-    public GameObject player;
-    public GameObject pipPrefab;
-    private Dictionary<GameObject, RadarObject> disctionary = new Dictionary<GameObject, RadarObject>();
+	public GameObject player;
+	public GameObject pipPrefab;
+	private Dictionary<GameObject, RadarObject> dictionary = new Dictionary<GameObject, RadarObject>();
 
 	// Use this for initialization
-	void Start () {
-		
+	void Start() {
+
 	}
-	
+
 	// Update is called once per frame
-	void Update () {
-        this.transform.position = player.transform.position;
+	void Update() {
+		this.transform.position = player.transform.position;
 	}
 
-    public void AddTrackingObject(GameObject obj) {
-        RadarObject pip = GameObject.Instantiate(pipPrefab, this.transform).GetComponent<RadarObject>();
-        pip.trackedObject = obj;
-        disctionary.Add(obj, pip);
-    }
-    
-    public void RemoveTrackingObject(GameObject obj) {
-        disctionary.Remove(obj);
-    }
+	public void AddTrackingObject(GameObject obj) {
+		RadarObject pip = GameObject.Instantiate(pipPrefab, this.transform).GetComponent<RadarObject>();
+		pip.trackedObject = obj;
+		dictionary.Add(obj, pip);
+	}
 
-    public void Clear() {
-        disctionary.Clear();
-    }
+	public void RemoveTrackingObject(GameObject obj) {
+		dictionary.Remove(obj);
+	}
+
+	public void Clear() {
+		dictionary.Clear();
+	}
 }

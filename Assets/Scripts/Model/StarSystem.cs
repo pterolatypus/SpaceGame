@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
-using Object = UnityEngine.Object;
 using Random = System.Random;
 
 namespace Model {
-    public class StarSystem : IEnumerable<GameObject>, IEnumerator<GameObject> {
+    public class StarSystem : IEnumerable<GameObject> {
 
         #region Private Fields
 
@@ -25,8 +23,7 @@ namespace Model {
             "Blue"
         };
 
-        private readonly List<Orbital> _satellites = new List<Orbital>();
-        private int _enumeratorPosition = -1;
+        private readonly List<Orbital> _satellites;
         private GameObject _gameObject;
         private bool _isGenerated = false;
         private int _rotation;
@@ -36,22 +33,6 @@ namespace Model {
         #endregion Private Fields
 
         #region Public Properties
-
-        public GameObject Current {
-            get {
-                if (_enumeratorPosition < 0) return null;
-
-                if (_enumeratorPosition > _satellites.Count) throw new IndexOutOfRangeException();
-
-                if (_enumeratorPosition == 0) return _gameObject;
-
-                return _satellites[_enumeratorPosition - 1].gameObject;
-            }
-        }
-
-        object IEnumerator.Current {
-            get { return Current; }
-        }
 
         [NotNull] public string Type {
             get { return Temps[_temp] + " " + Sizes[_size]; }
@@ -74,6 +55,7 @@ namespace Model {
         #region Internal Constructors
 
         internal StarSystem(Vector2 coords, int seed) {
+            _satellites = new List<Orbital>();
             Coords = coords;
             Seed = seed;
         }
@@ -82,22 +64,14 @@ namespace Model {
 
         #region Public Methods
 
-        public void Dispose() {
+        IEnumerator IEnumerable.GetEnumerator() {
+            return GetEnumerator();
         }
 
         public IEnumerator<GameObject> GetEnumerator() {
-            return this;
-        }
-
-        public bool MoveNext() {
-            if (_enumeratorPosition > _satellites.Count) return false;
-
-            _enumeratorPosition++;
-            return _enumeratorPosition <= _satellites.Count;
-        }
-
-        public void Reset() {
-            _enumeratorPosition = -1;
+            foreach (Orbital orbital in _satellites) {
+                yield return orbital.gameObject;
+            }
         }
 
         #endregion Public Methods
@@ -110,7 +84,9 @@ namespace Model {
             //instantiate all the game objects
             _gameObject = Object.Instantiate(_starPrefab, new Vector2(0, 0), Quaternion.Euler(0, 0, _rotation));
 
-            Vector3 scale = Vector3.one * (_size + 2) * (_size + 2); //TODO: What does this do? Either needs commenting, or assign those sub expressions to named local variables
+            Vector3
+                scale = Vector3.one * (_size + 2) *
+                        (_size + 2); //TODO: What does this do? Either needs commenting, or assign those sub expressions to named local variables
             _gameObject.transform.localScale = scale;
 
             foreach (Orbital obj in _satellites) {
