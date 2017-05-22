@@ -21,7 +21,7 @@ public class WorldUI : MonoBehaviour {
 
 	public void AddTrackingObject(GameObject obj) {
 		RadarObject pip = GameObject.Instantiate(pipPrefab, this.transform).GetComponent<RadarObject>();
-		pip.trackedObject = obj;
+		pip.TrackedObject = obj;
 		dictionary.Add(obj, pip);
 	}
 
