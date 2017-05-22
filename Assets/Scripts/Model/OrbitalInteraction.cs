@@ -1,14 +1,25 @@
 ﻿namespace Model {
     public abstract class OrbitalInteraction {
 
-        protected Orbital obj;
+        #region Private Fields
 
-        public OrbitalInteraction(Orbital obj) {
-            this.obj = obj;
+        private Orbital _obj;
+
+        #endregion Private Fields
+
+        #region Protected Constructors
+
+        protected OrbitalInteraction(Orbital obj) {
+            _obj = obj;
         }
 
-        public abstract InteractionTab GetTab();
-    
+        #endregion Protected Constructors
+
+        #region Internal Methods
+
+        internal abstract InteractionTab GetTab();
+
+        #endregion Internal Methods
 
     }
 }

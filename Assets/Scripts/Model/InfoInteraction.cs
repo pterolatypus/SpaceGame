@@ -8,31 +8,36 @@ namespace Model {
 
         #region Private Fields
 
-        private static readonly GameObject Prefab = (GameObject)Resources.Load("Prefabs/UI/InfoTab");
+        private static readonly GameObject Prefab = (GameObject) Resources.Load("Prefabs/UI/InfoTab");
         private readonly Random _rand;
 
         #endregion Private Fields
 
-        #region Public Properties
+        #region Internal Properties
 
         internal string Text { get; private set; }
 
-        #endregion Public Properties
+        #endregion Internal Properties
 
-        #region Public Constructors
+        #region Internal Constructors
 
         internal InfoInteraction(Orbital obj, int seed) : base(obj) {
             _rand = new Random(seed);
         }
 
-        #endregion Public Constructors
+        #endregion Internal Constructors
 
         #region Public Methods
 
-        public void AddLine(string line) {
-            Text += line;
-            Text += Environment.NewLine;
+        internal override InteractionTab GetTab() {
+            var tab = Object.Instantiate(Prefab).GetComponent<InfoTab>();
+            tab.Bind(this);
+            return tab;
         }
+
+        #endregion Public Methods
+
+        #region Internal Methods
 
         internal void Generate(int techlevel, int orbital, Planetoid.PlanetType type) {
             string strtype = "Planet type: " + type.name;
@@ -71,13 +76,16 @@ namespace Model {
             AddLine(period);
         }
 
-        public override InteractionTab GetTab() {
-            var tab = Object.Instantiate(Prefab).GetComponent<InfoTab>();
-            tab.Bind(this);
-            return tab;
+        #endregion Internal Methods
+
+        #region Private Methods
+
+        private void AddLine(string line) {
+            Text += line;
+            Text += Environment.NewLine;
         }
 
-        #endregion Public Methods
+        #endregion Private Methods
 
     }
 }

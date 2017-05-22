@@ -26,7 +26,7 @@ public class InteractionUI : MonoBehaviour {
 
     public void Start() {
         player.EnableControls(false);
-        Vector3 planetWorldPos = source.gameObject.transform.position;
+        Vector3 planetWorldPos = source.GameObject.transform.position;
         playerCamera.LockToPosition(planetWorldPos);
         Vector3 planetPos = Camera.main.WorldToScreenPoint(planetWorldPos);
         planetPos.x += 170;

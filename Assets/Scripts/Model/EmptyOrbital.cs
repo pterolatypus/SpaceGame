@@ -10,7 +10,7 @@
 
         #region Public Methods
 
-        public override void Load() {
+        internal override void Load() {
         }
 
         #endregion Public Methods

@@ -44,7 +44,7 @@ namespace Model {
             }
         }
 
-        public override InteractionTab GetTab() {
+        internal override InteractionTab GetTab() {
             TradeTab tab = GameObject.Instantiate(prefab).GetComponent<TradeTab>();
             tab.Bind(this);
             return tab;

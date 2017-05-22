@@ -71,7 +71,7 @@ namespace Model {
 
         public IEnumerator<GameObject> GetEnumerator() {
             foreach (Orbital orbital in _satellites) {
-                if (orbital.gameObject != null) yield return orbital.gameObject;
+                if (orbital.GameObject != null) yield return orbital.GameObject;
             }
         }
 
@@ -99,7 +99,7 @@ namespace Model {
             Object.Destroy(_gameObject);
             foreach (Orbital obj in _satellites) {
                 obj.Unload();
-                Object.Destroy(obj.gameObject);
+                Object.Destroy(obj.GameObject);
             }
             foreach (WorldPlanetoid p in Object.FindObjectsOfType<WorldPlanetoid>()) {
                 Object.Destroy(p.gameObject);

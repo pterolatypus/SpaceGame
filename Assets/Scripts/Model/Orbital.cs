@@ -1,32 +1,66 @@
 ﻿using UnityEngine;
+using Random = System.Random;
 
 namespace Model {
     public abstract class Orbital {
-    
-        protected float radius, angle;
-        private bool isGenerated = false;
-        protected int seed { get; private set; }
-        private static float minRadius = 200, radiusRange = 100;
-        public GameObject gameObject { get; protected set; }
 
-        public Orbital(int seed) {
-            this.seed = seed;
+        #region Protected Fields
+
+        protected float Radius, Angle;
+
+        #endregion Protected Fields
+
+        #region Private Fields
+
+        private const float MinRadius = 200;
+        private const float RadiusRange = 100;
+        private bool _isGenerated;
+
+        #endregion Private Fields
+
+        #region Internal Properties
+
+        internal GameObject GameObject { get; set; }
+
+        #endregion Internal Properties
+
+        #region Protected Properties
+
+        protected int Seed { get; private set; }
+
+        #endregion Protected Properties
+
+        #region Protected Constructors
+
+        protected Orbital(int seed) {
+            Seed = seed;
         }
 
-        public bool Generate(int orbital) {
-            if (isGenerated) return false;
-            var r = new System.Random(seed);
-            radius = ((orbital+1)*minRadius + (float) r.NextDouble()*radiusRange - radiusRange/2);
-            angle = (float) r.NextDouble()*360f;
-            isGenerated = true;
+        #endregion Protected Constructors
+
+        #region Internal Methods
+
+        internal abstract void Load();
+
+        internal void Unload() {
+            Object.Destroy(GameObject);
+        }
+
+        #endregion Internal Methods
+
+        #region Protected Methods
+
+        protected bool Generate(int orbital) {
+            if (_isGenerated) return false;
+
+            var r = new Random(Seed);
+            Radius = (orbital + 1) * MinRadius + (float) r.NextDouble() * RadiusRange - RadiusRange / 2;
+            Angle = (float) r.NextDouble() * 360f;
+            _isGenerated = true;
             return true;
         }
 
-        public abstract void Load();
-
-        public void Unload() {
-            GameObject.Destroy(gameObject);
-        }
+        #endregion Protected Methods
 
     }
 }

@@ -47,7 +47,7 @@ namespace Model {
         new public bool Generate(int orbital) {
             if (!base.Generate(orbital)) return false;
             PlanetType[] validTypes = (orbital < 4) ? typesNoIce : types;
-            var r = new System.Random(seed);
+            var r = new System.Random(Seed);
             double val = r.NextDouble();
             float div = 0f;
             foreach (PlanetType t in validTypes) {
@@ -65,11 +65,11 @@ namespace Model {
             techlevel = r.Next(techlevels.Length);
 
             interactions = new List<OrbitalInteraction>();
-            InfoInteraction info = new InfoInteraction(this, seed);
+            InfoInteraction info = new InfoInteraction(this, Seed);
             info.Generate(techlevel, orbital, type);
             interactions.Add(info);
             if (techlevel > 0) {
-                TradeInteraction trade = new TradeInteraction(this, seed);
+                TradeInteraction trade = new TradeInteraction(this, Seed);
                 trade.Generate(techlevel);
                 //interactions.Add(trade);
             }
@@ -78,11 +78,11 @@ namespace Model {
             return true;
         }
 
-        public override void Load() {
-            int x = (int) (radius * Mathf.Cos(angle));
-            int y = (int)(radius * Mathf.Sin(angle));
-            gameObject = GameObject.Instantiate(prefab, new Vector3(x, y, 0), Quaternion.Euler(0, 0, rotation));
-            WorldPlanetoid wp = gameObject.GetComponent<WorldPlanetoid>();
+        internal override void Load() {
+            int x = (int) (Radius * Mathf.Cos(Angle));
+            int y = (int)(Radius * Mathf.Sin(Angle));
+            GameObject = GameObject.Instantiate(prefab, new Vector3(x, y, 0), Quaternion.Euler(0, 0, rotation));
+            WorldPlanetoid wp = GameObject.GetComponent<WorldPlanetoid>();
             wp.Source = this;
         }
 
@@ -104,7 +104,7 @@ namespace Model {
         }
 
         public new void Unload() {
-            GameObject.Destroy(gameObject);
+            GameObject.Destroy(GameObject);
         }
 
     }
