@@ -1,8 +1,19 @@
 ﻿namespace Model {
-    class EmptyOrbital : Orbital {
+    internal class EmptyOrbital : Orbital {
 
-        public EmptyOrbital(int seed) : base(seed) { }
+        #region Public Constructors
 
-        public override void Load() {}
+        public EmptyOrbital(int seed) : base(seed) {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Methods
+
+        public override void Load() {
+        }
+
+        #endregion Public Methods
+
     }
 }
