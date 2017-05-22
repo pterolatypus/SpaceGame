@@ -33,7 +33,7 @@ namespace Controllers {
         // Use this for initialization
         private void Awake() {
             _galaxy = new Galaxy(NumberOfSystems);
-            LoadSystem(_galaxy.home);
+            LoadSystem(_galaxy.Home);
         }
 
         private void LoadSystem(StarSystem star) {

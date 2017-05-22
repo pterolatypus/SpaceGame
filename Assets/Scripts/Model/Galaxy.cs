@@ -1,47 +1,70 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using Random = System.Random;
 
 namespace Model {
-    public class Galaxy {
+    internal class Galaxy {
 
-        System.Random rand;
-        public List<StarSystem> stars { get; private set; }
-        public StarSystem home { get; private set; }
+        #region Private Fields
 
-        public Galaxy(int numberOfSystems) : this(numberOfSystems, new System.Random().Next()) { }
+        private readonly Random _rand;
+
+        #endregion Private Fields
+
+        #region Public Properties
+
+        public StarSystem Home { get; private set; }
+        public List<StarSystem> Stars { get; private set; }
+
+        #endregion Public Properties
+
+        #region Public Constructors
+
+        public Galaxy(int numberOfSystems) : this(numberOfSystems, new Random().Next()) {
+        }
 
         public Galaxy(int numberOfSystems, int seed) {
-            stars = new List<StarSystem>();
-            rand = new System.Random(seed);
+            Stars = new List<StarSystem>();
+            _rand = new Random(seed);
             GenerateWorld(numberOfSystems);
         }
 
-        public StarSystem GetRandomStar() {
-            int r = rand.Next(stars.Count);
-            return stars[r];
-        }
+        #endregion Public Constructors
 
-        private void GenerateWorld(int numberOfSystems) {
-            //Generate Galaxy
-            for (int i = 0; i < numberOfSystems; i++) {
-                StarSystem s = GenerateStar(rand);
-                stars.Add(s);
-            }
-            stars.Sort(
-                (l, r) => Vector2.SqrMagnitude(l.Coords).CompareTo(Vector2.SqrMagnitude(r.Coords))
-            );
-            Debug.Log("Generated " + stars.Count + " system(s)");
-            this.home = stars[0];
-        }
+        #region Public Methods
 
-        public StarSystem GenerateStar(System.Random generator) {
+        public static StarSystem GenerateStar(Random generator) {
+            const int coordsConstant = int.MaxValue / 2;
             return new StarSystem(
-                new Vector2(generator.Next() - Int32.MaxValue/2, generator.Next() - Int32.MaxValue/2),
+                new Vector2(generator.Next() - coordsConstant, generator.Next() - coordsConstant),
                 generator.Next()
             );
         }
 
+        public StarSystem GetRandomStar() {
+            int r = _rand.Next(Stars.Count);
+            return Stars[r];
+        }
+
+        #endregion Public Methods
+
+        #region Private Methods
+
+        private void GenerateWorld(int numberOfSystems) {
+            //Generate Galaxy
+            for (var i = 0; i < numberOfSystems; i++) {
+                StarSystem s = GenerateStar(_rand);
+                Stars.Add(s);
+            }
+
+            Stars.Sort(
+                (l, r) => Vector2.SqrMagnitude(l.Coords).CompareTo(Vector2.SqrMagnitude(r.Coords))
+            );
+            Debug.Log("Generated " + Stars.Count + " system(s)");
+            Home = Stars[0];
+        }
+
+        #endregion Private Methods
 
     }
 }
