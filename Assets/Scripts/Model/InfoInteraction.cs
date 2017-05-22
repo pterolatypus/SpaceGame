@@ -40,10 +40,10 @@ namespace Model {
         #region Internal Methods
 
         internal void Generate(int techlevel, int orbital, Planetoid.PlanetType type) {
-            string strtype = "Planet type: " + type.name;
+            string strtype = "Planet type: " + type.Name;
             AddLine(strtype);
 
-            string techl = "Tech Level: " + Planetoid.techlevels[techlevel];
+            string techl = "Tech Level: " + Planetoid.Techlevels[techlevel];
             AddLine(techl);
 
             var pop = (float) (_rand.NextDouble() + 0.5);

@@ -1,21 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Controllers;
 using UnityEngine;
+using Object = UnityEngine.Object;
+using Random = System.Random;
 
 namespace Model {
-    public class Planetoid : Orbital, IInteractable {
+    public partial class Planetoid : Orbital, IInteractable {
 
-        public struct PlanetType {
-            public string name { get; private set; }
-            public float weight { get; private set;  }
-            public PlanetType(string name, float weight) {
-                this.name = name;
-                this.weight = weight;
-            }
-        }
+        #region Public Fields
 
-        public static PlanetType[] types = {
+        public static readonly List<string> TechLevels = new List<string> {
+            "Uninhabited",
+            "Agricultural",
+            "Industrial",
+            "Technological"
+        };
+
+        public static readonly List<PlanetType> Types = new List<PlanetType> {
             new PlanetType("Dwarf Planet", 1.5f),
             new PlanetType("Rocky Planet", 1f),
             new PlanetType("Ice Planet", 0.8f),
@@ -23,67 +26,72 @@ namespace Model {
             new PlanetType("Gas Giant", 1.3f)
         };
 
-        private static PlanetType[] typesNoIce = {
-            new PlanetType("Dwarf Planet", 1.5f),
-            new PlanetType("Rocky Planet", 1f),
-            new PlanetType("Gas Giant", 1.3f)
-        };
+        public PlanetType Type;
 
-        public static String[] techlevels = {
-            "Uninhabited",
-            "Agricultural",
-            "Industrial",
-            "Technological"
-        };
+        #endregion Public Fields
 
-        private int techlevel;
-        private GameObject prefab;
-        private float rotation;
-        private List<OrbitalInteraction> interactions;
-        public PlanetType type;
+        #region Private Fields
 
-        public Planetoid(int seed) : base(seed) { }
+        private static readonly List<PlanetType> TypesNoIce = Types.Where(planetType => {
+            bool isIceType = planetType.Name.StartsWith("Ice", StringComparison.Ordinal);
+            return !isIceType;
+        }).ToList();
 
-        new public bool Generate(int orbital) {
+        private List<OrbitalInteraction> _interactions;
+
+        private GameObject _prefab;
+
+        private float _rotation;
+
+        private int _techLevel;
+
+        #endregion Private Fields
+
+        #region Public Constructors
+
+        public Planetoid(int seed) : base(seed) {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Methods
+
+        public new bool Generate(int orbital) {
             if (!base.Generate(orbital)) return false;
-            PlanetType[] validTypes = (orbital < 4) ? typesNoIce : types;
-            var r = new System.Random(Seed);
+
+            List<PlanetType> validTypes = orbital < 4 ? TypesNoIce : Types;
+
+            var r = new Random(Seed);
             double val = r.NextDouble();
-            float div = 0f;
+            float div = validTypes.Sum(t => t.Weight);
+
+            var total = 0f;
+            Type = validTypes[validTypes.Count - 1];
+
             foreach (PlanetType t in validTypes) {
-                div += t.weight;
-            }
-            float total = 0f;
-            type = validTypes[validTypes.Length-1];
-            foreach (PlanetType t in validTypes) {
-                total += t.weight / div;
+                total += t.Weight / div;
                 if (total > val) {
-                    type = t;
+                    Type = t;
                     break;
                 }
             }
-            techlevel = r.Next(techlevels.Length);
 
-            interactions = new List<OrbitalInteraction>();
-            InfoInteraction info = new InfoInteraction(this, Seed);
-            info.Generate(techlevel, orbital, type);
-            interactions.Add(info);
-            if (techlevel > 0) {
-                TradeInteraction trade = new TradeInteraction(this, Seed);
-                trade.Generate(techlevel);
+            _techLevel = r.Next(TechLevels.Count);
+
+            _interactions = new List<OrbitalInteraction>();
+            var info = new InfoInteraction(this, Seed);
+            info.Generate(_techLevel, orbital, Type);
+
+            _interactions.Add(info);
+            if (_techLevel > 0) {
+                var trade = new TradeInteraction(this, Seed);
+                trade.Generate(_techLevel);
                 //interactions.Add(trade);
             }
-            prefab = Resources.Load("Prefabs/Planets/" + type.name) as GameObject;
-            rotation = (int) (360 * r.NextDouble());
-            return true;
-        }
 
-        internal override void Load() {
-            int x = (int) (Radius * Mathf.Cos(Angle));
-            int y = (int)(Radius * Mathf.Sin(Angle));
-            GameObject = GameObject.Instantiate(prefab, new Vector3(x, y, 0), Quaternion.Euler(0, 0, rotation));
-            WorldPlanetoid wp = GameObject.GetComponent<WorldPlanetoid>();
-            wp.Source = this;
+            _prefab = (GameObject) Resources.Load("Prefabs/Planets/" + Type.Name);
+            _rotation = (int) (360 * r.NextDouble());
+            return true;
         }
 
         public string GetInteractionText() {
@@ -92,20 +100,38 @@ namespace Model {
 
         public void Interact(PlayerShipController player) {
             Debug.Log("Oh no you friccin moron, you just got INTERACTED! Tag your friend to totally INTERACT them.");
-            InteractionUI window = GameObject.Instantiate(Resources.Load("Prefabs/UI/InteractionWindow") as GameObject).GetComponent<InteractionUI>();
+
+            var window = Object.Instantiate(Resources.Load("Prefabs/UI/InteractionWindow") as GameObject).GetComponent<InteractionUI>();
             window.transform.SetParent(GameObject.Find("ScreenUI").transform, false);
             window.player = player;
             window.source = this;
-            RectTransform t = (RectTransform) window.transform;
+
+            var t = (RectTransform) window.transform;
             t.offsetMax = Vector2.zero;
-            foreach (OrbitalInteraction i in interactions) {
+
+            foreach (OrbitalInteraction i in _interactions) {
                 window.AddTab(i);
             }
         }
 
         public new void Unload() {
-            GameObject.Destroy(GameObject);
+            Object.Destroy(GameObject);
         }
+
+        #endregion Public Methods
+
+        #region Internal Methods
+
+        internal override void Load() {
+            var x = (int) (Radius * Mathf.Cos(Angle));
+            var y = (int) (Radius * Mathf.Sin(Angle));
+
+            GameObject = Object.Instantiate(_prefab, new Vector3(x, y, 0), Quaternion.Euler(0, 0, _rotation));
+            var wp = GameObject.GetComponent<WorldPlanetoid>();
+            wp.Source = this;
+        }
+
+        #endregion Internal Methods
 
     }
 }
