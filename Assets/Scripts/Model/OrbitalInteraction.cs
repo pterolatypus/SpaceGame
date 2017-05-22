@@ -1,4 +1,6 @@
-﻿namespace Model {
+﻿using UI;
+
+namespace Model {
     public abstract class OrbitalInteraction {
 
         #region Private Fields

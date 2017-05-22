@@ -1,17 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Model;
-using UnityEngine;
+﻿using Model;
 
-public class TradeTab : InteractionTab {
+namespace UI {
+    public class TradeTab : InteractionTab {
 
-    private TradeInteraction source;
+        private TradeInteraction source;
 
-    public void Bind(TradeInteraction interaction) {
-        source = interaction;
-    }
+        public void Bind(TradeInteraction interaction) {
+            source = interaction;
+        }
 
-    public override string GetTitle() {
-        return "Trade";
+        public override string GetTitle() {
+            return "Trade";
+        }
     }
 }

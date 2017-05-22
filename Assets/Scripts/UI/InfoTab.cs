@@ -1,27 +1,34 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Model;
+﻿using Model;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class InfoTab : InteractionTab {
+namespace UI {
+    public class InfoTab : InteractionTab {
 
-    [SerializeField]
-    private Text data;
-    
-    private InfoInteraction source;
+        #region Private Fields
 
-    public void Bind(InfoInteraction interaction) {
-        source = interaction;
+        [FormerlySerializedAs("data")] [SerializeField] private Text _data;
+
+        private InfoInteraction _source;
+
+        #endregion Private Fields
+
+        #region Public Methods
+
+        public void Bind(InfoInteraction interaction) {
+            _source = interaction;
+        }
+
+        public override string GetTitle() {
+            return "Info";
+        }
+
+        public void Start() {
+            _data.text = _source.Text;
+        }
+
+        #endregion Public Methods
+
     }
-
-    public void Start() {
-        data.text = source.Text;
-    }
-
-    public override string GetTitle() {
-        return "Info";
-    }
-
 }

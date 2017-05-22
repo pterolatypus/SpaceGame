@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿namespace UI {
+    public abstract class InteractionTab : MonoBehaviour {
 
-public abstract class InteractionTab : MonoBehaviour {
+        public abstract string GetTitle();
 
-    public abstract string GetTitle();
-
+    }
 }
