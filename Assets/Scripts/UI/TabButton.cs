@@ -7,35 +7,42 @@ namespace UI {
 
         #region Private Fields
 
-        [FormerlySerializedAs("textObject")][SerializeField] private Text textObject;
+        [FormerlySerializedAs("textObject")] [SerializeField] private Text _textObject;
 
         #endregion Private Fields
 
-        #region Public Properties
+        #region Internal Properties
 
-        public InteractionTab tab { get; private set; }
-
-        public string text {
-            get { return textObject.text; }
-            set { textObject.text = value; }
+        internal string Text {
+            get { return _textObject.text; }
+            set { _textObject.text = value; }
         }
 
-        public InteractionUI window { get; private set; }
+        #endregion Internal Properties
 
-        #endregion Public Properties
+        #region Private Properties
+
+        private InteractionTab Tab { get; set; }
+        private InteractionUI Window { get; set; }
+
+        #endregion Private Properties
 
         #region Public Methods
 
-        public void Bind(InteractionUI window, InteractionTab tab) {
-            this.window = window;
-            this.tab = tab;
-        }
-
         public void SelectTab() {
-            window.SetActiveTab(tab);
+            Window.SetActiveTab(Tab);
         }
 
         #endregion Public Methods
+
+        #region Internal Methods
+
+        internal void Bind(InteractionUI window, InteractionTab tab) {
+            Window = window;
+            Tab = tab;
+        }
+
+        #endregion Internal Methods
 
     }
 }

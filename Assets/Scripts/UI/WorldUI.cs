@@ -1,36 +1,59 @@
 ﻿using System.Collections.Generic;
 using Controllers;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UI {
-	public class WorldUI : MonoBehaviour {
+    public class WorldUI : MonoBehaviour {
 
-		public GameObject player;
-		public GameObject pipPrefab;
-		private Dictionary<GameObject, RadarObject> dictionary = new Dictionary<GameObject, RadarObject>();
+        #region Public Fields
 
-		// Use this for initialization
-		void Start() {
+        [FormerlySerializedAs("pipPrefab")] public GameObject PipPrefab;
+        [FormerlySerializedAs("player")] public GameObject Player;
 
-		}
+        #endregion Public Fields
 
-		// Update is called once per frame
-		void Update() {
-			this.transform.position = player.transform.position;
-		}
+        #region Private Fields
 
-		public void AddTrackingObject(GameObject obj) {
-			RadarObject pip = GameObject.Instantiate(pipPrefab, this.transform).GetComponent<RadarObject>();
-			pip.TrackedObject = obj;
-			dictionary.Add(obj, pip);
-		}
+        private Dictionary<GameObject, RadarObject> _dictionary;
 
-		public void RemoveTrackingObject(GameObject obj) {
-			dictionary.Remove(obj);
-		}
+        #endregion Private Fields
 
-		public void Clear() {
-			dictionary.Clear();
-		}
-	}
+        #region Public Methods
+
+        public void RemoveTrackingObject(GameObject obj) {
+            _dictionary.Remove(obj);
+        }
+
+        #endregion Public Methods
+
+        #region Internal Methods
+
+        internal void AddTrackingObject(GameObject obj) {
+            var pip = Instantiate(PipPrefab, transform).GetComponent<RadarObject>();
+            pip.TrackedObject = obj;
+            _dictionary.Add(obj, pip);
+        }
+
+        internal void Clear() {
+            _dictionary.Clear();
+        }
+
+        #endregion Internal Methods
+
+        #region Private Methods
+
+        // Use this for initialization
+        private void Start() {
+            _dictionary = new Dictionary<GameObject, RadarObject>();
+        }
+
+        // Update is called once per frame
+        private void Update() {
+            transform.position = Player.transform.position;
+        }
+
+        #endregion Private Methods
+
+    }
 }

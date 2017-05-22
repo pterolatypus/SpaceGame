@@ -75,7 +75,7 @@ namespace UI {
 
             var button = Instantiate(_button).GetComponent<TabButton>();
             button.Bind(this, tab);
-            button.text = tab.GetTitle();
+            button.Text = tab.GetTitle();
             button.transform.SetParent(_tabButtonHolder.transform, false);
 
             ((RectTransform) button.transform).localPosition = new Vector2(10 + 170 * (_tabs.Count - 1), 0);
