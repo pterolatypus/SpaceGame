@@ -17,7 +17,7 @@ public class InfoTab : InteractionTab {
     }
 
     public void Start() {
-        data.text = source.text;
+        data.text = source.Text;
     }
 
     public override string GetTitle() {

@@ -1,39 +1,56 @@
 ﻿using System;
 using UnityEngine;
+using Object = UnityEngine.Object;
+using Random = System.Random;
 
 namespace Model {
     public class InfoInteraction : OrbitalInteraction {
 
-        private static GameObject prefab = Resources.Load("Prefabs/UI/InfoTab") as GameObject;
-        private System.Random rand;
-        public string text { get; private set; }
+        #region Private Fields
 
-        public InfoInteraction(Orbital obj, int seed) : base(obj) {
-            rand = new System.Random(seed);
+        private static readonly GameObject Prefab = (GameObject)Resources.Load("Prefabs/UI/InfoTab");
+        private readonly Random _rand;
+
+        #endregion Private Fields
+
+        #region Public Properties
+
+        internal string Text { get; private set; }
+
+        #endregion Public Properties
+
+        #region Public Constructors
+
+        internal InfoInteraction(Orbital obj, int seed) : base(obj) {
+            _rand = new Random(seed);
         }
 
-        public override InteractionTab GetTab() {
-            InfoTab tab = GameObject.Instantiate(prefab).GetComponent<InfoTab>();
-            tab.Bind(this);
-            return tab;
+        #endregion Public Constructors
+
+        #region Public Methods
+
+        public void AddLine(string line) {
+            Text += line;
+            Text += Environment.NewLine;
         }
 
-        public void Generate(int techlevel, int orbital, Planetoid.PlanetType type) {
-
+        internal void Generate(int techlevel, int orbital, Planetoid.PlanetType type) {
             string strtype = "Planet type: " + type.name;
             AddLine(strtype);
 
             string techl = "Tech Level: " + Planetoid.techlevels[techlevel];
             AddLine(techl);
 
-            float pop = (float) (rand.NextDouble() + 0.5);
+            var pop = (float) (_rand.NextDouble() + 0.5);
             pop *= techlevel * 2;
             string population;
             if (pop > 1) {
                 population = Math.Round(pop, 2) + " billion";
-            } else if (pop > 0) {
+            }
+            else if (pop > 0) {
                 population = Math.Round(pop * 1000, 2) + " million";
-            } else {
+            }
+            else {
                 population = "Zero";
             }
             population = "Population: " + population;
@@ -41,22 +58,26 @@ namespace Model {
 
             //AddLine("Orbital shell: " + orbital);
 
-            float temp = rand.Next(193, 213);
-            temp *= (float) Math.Sqrt(3f/orbital);
+            float temp = _rand.Next(193, 213);
+            temp *= (float) Math.Sqrt(3f / orbital);
             temp -= 173;
             string temperature = "Average temperature: " + Math.Round(temp, 0) + " degrees Celsius";
             AddLine(temperature);
 
-            float orbitPeriod = (float) (rand.NextDouble() - 0.5);
-            orbitPeriod = 1 + (orbitPeriod / 5f);
-            orbitPeriod *= (orbital / 3f);
+            var orbitPeriod = (float) (_rand.NextDouble() - 0.5);
+            orbitPeriod = 1 + orbitPeriod / 5f;
+            orbitPeriod *= orbital / 3f;
             string period = "Orbital period: " + Math.Round(orbitPeriod, 2) + " Earth years";
             AddLine(period);
         }
 
-        public void AddLine(string line) {
-            text += line;
-            text += Environment.NewLine;
+        public override InteractionTab GetTab() {
+            var tab = Object.Instantiate(Prefab).GetComponent<InfoTab>();
+            tab.Bind(this);
+            return tab;
         }
+
+        #endregion Public Methods
+
     }
 }
