@@ -29,12 +29,12 @@ public class GameController : MonoBehaviour {
         current = star;
         current.Load();
 
-        foreach (object obj in current) {
-            if (obj != null) radar.AddTrackingObject(obj as GameObject);
+        foreach (GameObject obj in current) {
+            radar.AddTrackingObject(obj);
         }
 
         float angle = (float) new Random().NextDouble() * 360;
-        var radius = 200;
+        const int radius = 200;
 
         var x = (int) (radius * Mathf.Cos(angle));
         var y = (int) (radius * Mathf.Sin(angle));

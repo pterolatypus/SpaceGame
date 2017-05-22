@@ -7,7 +7,7 @@ using Object = UnityEngine.Object;
 using Random = System.Random;
 
 namespace Model {
-    public class StarSystem : IEnumerable, IEnumerator<GameObject> {
+    public class StarSystem : IEnumerable<GameObject>, IEnumerator<GameObject> {
 
         #region Private Fields
 
@@ -85,7 +85,7 @@ namespace Model {
         public void Dispose() {
         }
 
-        public IEnumerator GetEnumerator() {
+        public IEnumerator<GameObject> GetEnumerator() {
             return this;
         }
 
