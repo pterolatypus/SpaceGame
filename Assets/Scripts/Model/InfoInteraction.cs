@@ -43,7 +43,7 @@ namespace Model {
             string strtype = "Planet type: " + type.Name;
             AddLine(strtype);
 
-            string techl = "Tech Level: " + Planetoid.Techlevels[techlevel];
+            string techl = "Tech Level: " + Planetoid.TechLevels[techlevel];
             AddLine(techl);
 
             var pop = (float) (_rand.NextDouble() + 0.5);

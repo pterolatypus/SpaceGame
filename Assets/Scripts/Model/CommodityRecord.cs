@@ -26,7 +26,7 @@ namespace Model {
         public float GetMarketValue() {
             var stockScale = (float) Math.Exp(-Stock);
             float supplyScale = 1 / (2 + SupplyFactor);
-            return Commodity.baseValue * stockScale * supplyScale;
+            return Commodity.BaseValue * stockScale * supplyScale;
         }
 
         #endregion Public Methods

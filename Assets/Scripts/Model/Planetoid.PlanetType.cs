@@ -1,25 +1,25 @@
 ﻿namespace Model {
-    public partial class Planetoid : Orbital, IInteractable {
+    public partial class Planetoid {
 
         #region Public Structs
 
         public struct PlanetType {
 
-            #region Public Properties
+            #region Internal Properties
 
-            public string Name { get; private set; }
-            public float Weight { get; private set; }
+            internal string Name { get; private set; }
+            internal float Weight { get; private set; }
 
-            #endregion Public Properties
+            #endregion Internal Properties
 
-            #region Public Constructors
+            #region Internal Constructors
 
-            public PlanetType(string name, float weight) : this() {
+            internal PlanetType(string name, float weight) : this() {
                 Name = name;
                 Weight = weight;
             }
 
-            #endregion Public Constructors
+            #endregion Internal Constructors
 
         }
 
