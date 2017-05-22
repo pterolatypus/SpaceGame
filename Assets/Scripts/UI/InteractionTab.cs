@@ -1,7 +1,11 @@
 ﻿namespace UI {
     public abstract class InteractionTab : MonoBehaviour {
 
-        public abstract string GetTitle();
+        #region Public Methods
+
+        internal abstract string GetTitle();
+
+        #endregion Public Methods
 
     }
 }
