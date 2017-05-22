@@ -19,60 +19,36 @@ namespace UI {
 
         #endregion Private Fields
 
-        #region Public Properties
+        #region Internal Properties
 
-        public PlayerShipController Player { get; set; }
-        public Orbital Source { get; set; }
+        internal PlayerShipController Player { get; set; }
+        internal Orbital Source { get; set; }
 
-        #endregion Public Properties
+        #endregion Internal Properties
 
         #region Public Methods
 
-        public void AddTab(OrbitalInteraction interaction) {
-            InteractionTab tab = interaction.GetTab();
-            _tabs.Add(tab);
-            if (_tabs.Count > 1) {
-                tab.gameObject.SetActive(false);
-            }
-            var t = (RectTransform) tab.transform;
-            t.SetParent(transform, false);
-            var button = Instantiate(_button).GetComponent<TabButton>();
-            button.Bind(this, tab);
-            button.text = tab.GetTitle();
-            button.transform.SetParent(_tabButtonHolder.transform, false);
-            ((RectTransform) button.transform).localPosition = new Vector2(10 + 170 * (_tabs.Count - 1), 0);
-        }
-
         public void Awake() {
             if (_button == null) {
-                _button = Resources.Load("Prefabs/UI/TabButton") as GameObject;
+                _button = (GameObject) Resources.Load("Prefabs/UI/TabButton");
             }
             _tabs = new List<InteractionTab>();
             _playerCamera = Camera.main.GetComponent<CameraFollowPlayer>();
         }
 
-        public void Close() {
-            Destroy(gameObject);
-            Player.EnableControls(true);
-            _playerCamera.LockToPosition(null);
-            _worldUI.SetActive(true);
-        }
-
-        public void SetActiveTab(InteractionTab tab) {
-            ClearTabs();
-            tab.gameObject.SetActive(true);
-        }
-
         public void Start() {
             Player.EnableControls(false);
             Vector3 planetWorldPos = Source.GameObject.transform.position;
+
             _playerCamera.LockToPosition(planetWorldPos);
             Vector3 planetPos = Camera.main.WorldToScreenPoint(planetWorldPos);
             planetPos.x += 170;
             Vector3 lockPos = Camera.main.ScreenToWorldPoint(planetPos);
+
             _playerCamera.LockToPosition(lockPos, 2f);
             _worldUI = GameObject.Find("InWorldUI");
             _worldUI.SetActive(false);
+
             Player.gameObject.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
         }
 
@@ -84,12 +60,47 @@ namespace UI {
 
         #endregion Public Methods
 
+        #region Internal Methods
+
+        internal void AddTab(OrbitalInteraction interaction) {
+            InteractionTab tab = interaction.GetTab();
+            _tabs.Add(tab);
+
+            if (_tabs.Count > 1) {
+                tab.gameObject.SetActive(false);
+            }
+
+            var t = (RectTransform) tab.transform;
+            t.SetParent(transform, false);
+
+            var button = Instantiate(_button).GetComponent<TabButton>();
+            button.Bind(this, tab);
+            button.text = tab.GetTitle();
+            button.transform.SetParent(_tabButtonHolder.transform, false);
+
+            ((RectTransform) button.transform).localPosition = new Vector2(10 + 170 * (_tabs.Count - 1), 0);
+        }
+
+        internal void SetActiveTab(InteractionTab tab) {
+            ClearTabs();
+            tab.gameObject.SetActive(true);
+        }
+
+        #endregion Internal Methods
+
         #region Private Methods
 
         private void ClearTabs() {
             foreach (InteractionTab tab in _tabs) {
                 tab.gameObject.SetActive(false);
             }
+        }
+
+        private void Close() {
+            Destroy(gameObject);
+            Player.EnableControls(true);
+            _playerCamera.LockToPosition(null);
+            _worldUI.SetActive(true);
         }
 
         #endregion Private Methods
