@@ -1,43 +1,60 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Controllers {
     public class CameraFollowPlayer : MonoBehaviour {
 
-        public GameObject player;
-        public float cameraFollowDelay = 0.3f;
-        public float cameraZoomFactor = 0.5f;
-        private Vector3 cameraVelocity = new Vector3(0, 0, 0);
-        private bool follow = true;
+        #region Public Fields
 
-        // Use this for initialization
-        void Start () {
-		
-        }
+        [FormerlySerializedAs("cameraFollowDelay")] public float CameraFollowDelay = 0.3f;
+        [FormerlySerializedAs("cameraZoomFactor")] public float CameraZoomFactor = 0.5f;
+        [FormerlySerializedAs("player")] public GameObject Player;
 
-        // Update is called once per frame
-        void FixedUpdate() {
-            if (follow) {
-                Vector3 target = player.transform.position - new Vector3(0, 0, 10);
-                Vector3 newPos = Vector3.SmoothDamp(transform.position, target, ref cameraVelocity, cameraFollowDelay);
-                transform.position = newPos;
-                GetComponent<Camera>().orthographicSize = 5f + cameraVelocity.magnitude * cameraZoomFactor;
-            }
-        }
+        #endregion Public Fields
 
-        public void LockToPosition(Nullable<Vector2> pos) {
+        #region Private Fields
+
+        [Component] private Camera _camera;
+        private Vector3 _cameraVelocity = new Vector3(0, 0, 0);
+        private bool _follow = true;
+
+        #endregion Private Fields
+
+        #region Internal Methods
+
+        internal void LockToPosition(Vector2? pos) {
             LockToPosition(pos, 0f);
         }
 
-        public void LockToPosition(Nullable<Vector2> pos, float zoom) {
+        internal void LockToPosition(Vector2? pos, float zoom) {
             if (!pos.HasValue) {
-                follow = true;
+                _follow = true;
             }
             else {
-                follow = false;
+                _follow = false;
                 transform.position = new Vector3(pos.Value.x, pos.Value.y, -10);
-                GetComponent<Camera>().orthographicSize = 5f - zoom;
+                _camera.orthographicSize = 5f - zoom;
             }
         }
+
+        #endregion Internal Methods
+
+        #region Private Methods
+
+        // Update is called once per frame
+        private void FixedUpdate() {
+            if (!_follow) return;
+
+            Vector3 target = Player.transform.position - new Vector3(0, 0, 10);
+            transform.position = Vector3.SmoothDamp(transform.position, target, ref _cameraVelocity, CameraFollowDelay);
+            _camera.orthographicSize = 5f + _cameraVelocity.magnitude * CameraZoomFactor;
+        }
+
+        private void Start() {
+            this.LoadComponents();
+        }
+
+        #endregion Private Methods
+
     }
 }
