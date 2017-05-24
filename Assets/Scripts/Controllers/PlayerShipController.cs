@@ -18,11 +18,11 @@ namespace Controllers {
 
         private const float AnimSpeedMax = 2f;
         private const float AnimSpeedMin = 0.5f;
-        private Animator _anim;
+        [Component]private Animator _anim;
         private bool _controls = true;
         private IInteractable _interactionTarget;
         private float _maxSpeed = 1f;
-        private Rigidbody2D _rb;
+        [Component]private Rigidbody2D _rb;
         [FormerlySerializedAs("txtInteract")] [SerializeField] private Text _txtInteract;
 
         #endregion Private Fields
@@ -87,8 +87,7 @@ namespace Controllers {
 
         // Use this for initialization
         private void Start() {
-            _rb = GetComponent<Rigidbody2D>();
-            _anim = GetComponent<Animator>();
+           this.LoadComponents();
         }
 
         // Update is called once per frame

@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+
 using Controllers;
+
 using Model;
+
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -10,11 +13,16 @@ namespace UI {
         #region Private Fields
 
         private static GameObject _button;
+
+        [Component("Main Camera")]
         private CameraFollowPlayer _playerCamera;
 
-        [FormerlySerializedAs("tabButtonHolder")] [SerializeField] private GameObject _tabButtonHolder;
+        [FormerlySerializedAs("tabButtonHolder")]
+        [SerializeField]
+        private GameObject _tabButtonHolder;
 
         private List<InteractionTab> _tabs;
+
         private GameObject _worldUI;
 
         #endregion Private Fields
@@ -22,6 +30,7 @@ namespace UI {
         #region Internal Properties
 
         internal PlayerShipController Player { get; set; }
+
         internal Orbital Source { get; set; }
 
         #endregion Internal Properties
@@ -30,10 +39,11 @@ namespace UI {
 
         public void Awake() {
             if (_button == null) {
-                _button = (GameObject) Resources.Load("Prefabs/UI/TabButton");
+                _button = (GameObject)Resources.Load("Prefabs/UI/TabButton");
             }
+
             _tabs = new List<InteractionTab>();
-            _playerCamera = Camera.main.GetComponent<CameraFollowPlayer>();
+            this.LoadComponents();
         }
 
         public void Start() {
@@ -70,7 +80,7 @@ namespace UI {
                 tab.gameObject.SetActive(false);
             }
 
-            var t = (RectTransform) tab.transform;
+            var t = (RectTransform)tab.transform;
             t.SetParent(transform, false);
 
             var button = Instantiate(_button).GetComponent<TabButton>();
@@ -78,7 +88,7 @@ namespace UI {
             button.Text = tab.GetTitle();
             button.transform.SetParent(_tabButtonHolder.transform, false);
 
-            ((RectTransform) button.transform).localPosition = new Vector2(10 + 170 * (_tabs.Count - 1), 0);
+            ((RectTransform)button.transform).localPosition = new Vector2(10 + 170 * (_tabs.Count - 1), 0);
         }
 
         internal void SetActiveTab(InteractionTab tab) {
