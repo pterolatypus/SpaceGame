@@ -10,14 +10,14 @@ namespace Model {
 
         #region Private Fields
 
-        private static readonly string[] Sizes = {
+        private static readonly List<string> Sizes = new List<string>{
             "Dwarf",
             "Star",
             "Giant",
             "Supergiant"
         };
 
-        private static readonly string[] Temps = {
+        private static readonly List<string> Temps = new List<string>{
             "Red",
             "Yellow",
             "White",
