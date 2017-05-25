@@ -11,14 +11,14 @@ namespace Model
     {
         #region Private Fields
 
-        private static readonly List<string> Sizes = new List<string> {
+        private static readonly List<string> Sizes = new List<string>{
             "Dwarf",
             "Star",
             "Giant",
             "Supergiant"
         };
 
-        private static readonly List<string> Temps = new List<string> {
+        private static readonly List<string> Temps = new List<string>{
             "Red",
             "Yellow",
             "White",
@@ -127,8 +127,8 @@ namespace Model
             if (_isGenerated) return false;
 
             var rand = new Random(Seed);
-            _temp = rand.Next(Temps.Count);
-            _size = rand.Next(Sizes.Count);
+            _temp = rand.Next(Temps.Length);
+            _size = rand.Next(Sizes.Length);
 
             int numOrbits = 5 * (_size + 1);
             for (var i = 1; i <= numOrbits; i++)
@@ -136,8 +136,7 @@ namespace Model
                 GenerateOrbital(rand, i);
             }
 
-
-            _starPrefab = (GameObject)Resources.Load("Prefabs/Stars/" + Temps[_temp]);
+            _starPrefab = Resources.Load("Prefabs/Stars/" + Temps[_temp]) as GameObject;
             _rotation = (int)(360 * rand.NextDouble());
             return true;
         }

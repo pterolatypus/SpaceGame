@@ -318,11 +318,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17c49a836210d2d43a9fe573154ad2dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  messageText: 
+  __messageText: 
+  secondsBeforeCured: 4
   image: {fileID: 370811325}
   normalColor: {r: 1, g: 0.92941177, b: 0.5735294, a: 1}
   poisonColor: {r: 0.16727932, g: 0.5735294, b: 0, a: 1}
-  secondsBeforeCured: 4
 --- !u!114 &370811325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -396,7 +396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65febbbd6c25ad449bc2b92f305adb59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  messageText: 
+  __messageText: 
   player: {fileID: 370811324}
   poisonColor: {r: 0.16727932, g: 0.5735294, b: 0, a: 1}
   poisonList: {fileID: 1542965927}
@@ -587,7 +587,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12f8b64768a9a0b47b9daa14d124d71c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  messageText: 
+  __messageText: 
   buttonPrefab: {fileID: 114275247050919876, guid: d72440b239ae1b147bf6da43be3dd277,
     type: 2}
 --- !u!114 &1537886299
@@ -659,7 +659,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12f8b64768a9a0b47b9daa14d124d71c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  messageText: 
+  __messageText: 
   buttonPrefab: {fileID: 114275247050919876, guid: d72440b239ae1b147bf6da43be3dd277,
     type: 2}
 --- !u!114 &1542965928

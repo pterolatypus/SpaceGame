@@ -237,6 +237,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04b214ff3963c3343b54dac60dacfa60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  __messageText: 
   readonlyString: Cannot change in inspector
   nonNegativeInt: 0
   nonNegativeFloat: 0

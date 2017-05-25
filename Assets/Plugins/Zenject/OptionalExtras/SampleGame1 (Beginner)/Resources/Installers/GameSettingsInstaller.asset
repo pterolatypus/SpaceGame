@@ -20,9 +20,6 @@ MonoBehaviour:
       oscillationFrequency: 1
       oscillationAmplitude: 0.1
     StateDead:
-      brokenTemplate: {fileID: 100010, guid: 5b84466ca2cdf93418bd1e3234edb0e1, type: 2}
-      explosionTemplate: {fileID: 100000, guid: 185972cb8011a1449b7360c07a62fdf2,
-        type: 2}
       explosionForce: 15
     StateStarting:
       StartOffset: {x: 0, y: 3, z: 0}

@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f533328de2846fb44a74002b44e11314, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  messageText: 
+  __messageText: 
   cube: {fileID: 991400395}
   leftPosition: {fileID: 2059058861}
   rightPosition: {fileID: 869536673}

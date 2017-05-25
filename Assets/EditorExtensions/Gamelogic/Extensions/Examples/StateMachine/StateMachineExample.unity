@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -1192,7 +1192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b02f78c142d5bc4bb7cfd09b8d3f59e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  messageText: 
+  __messageText: 
   happyIndicator: {fileID: 490070672}
   sadIndicator: {fileID: 379070644}
   healthText: {fileID: 1002533069}

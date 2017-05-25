@@ -5,12 +5,12 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 400000}
-  - 15: {fileID: 1500000}
-  - 12: {fileID: 1200000}
-  - 26: {fileID: 2600000}
+  - component: {fileID: 400000}
+  - component: {fileID: 1500000}
+  - component: {fileID: 1200000}
+  - component: {fileID: 2600000}
   m_Layer: 0
   m_Name: Fire
   m_TagString: Untagged
@@ -24,11 +24,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_LocalRotation: {x: .707106709, y: 0, z: 0, w: -.707106888}
-  m_LocalPosition: {x: -2.49987231e-08, y: .104851745, z: -.676264524}
-  m_LocalScale: {x: 9.52567768, y: 9.52567387, z: 9.52567387}
+  m_LocalRotation: {x: 0.7071067, y: 0, z: 0, w: -0.7071069}
+  m_LocalPosition: {x: -0.000000024998723, y: 0.104851745, z: -0.6762645}
+  m_LocalScale: {x: 9.525678, y: 9.525674, z: 9.525674}
   m_Children: []
   m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!12 &1200000
 ParticleAnimator:
   m_ObjectHideFlags: 1
@@ -68,16 +70,16 @@ EllipsoidParticleEmitter:
   serializedVersion: 2
   m_Enabled: 1
   m_Emit: 1
-  minSize: .300000012
-  maxSize: .400000006
-  minEnergy: .400000006
-  maxEnergy: .600000024
+  minSize: 0.3
+  maxSize: 0.4
+  minEnergy: 0.4
+  maxEnergy: 0.6
   minEmission: 40
   maxEmission: 60
   worldVelocity: {x: 0, y: 0, z: 0}
-  localVelocity: {x: 0, y: 1.80000007, z: 0}
-  rndVelocity: {x: .120000005, y: .600000024, z: .120000005}
-  emitterVelocityScale: .0500000007
+  localVelocity: {x: 0, y: 1.8000001, z: 0}
+  rndVelocity: {x: 0.120000005, y: 0.6, z: 0.120000005}
+  emitterVelocityScale: 0.05
   tangentVelocity: {x: 0, y: 0, z: 0}
   angularVelocity: 0
   rndAngularVelocity: 100
@@ -95,18 +97,29 @@ ParticleRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_LightmapIndex: 255
-  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_MotionVectors: 1
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 1
   m_Materials:
   - {fileID: 2100000, guid: 0babe53ca63bb49209164496ab5e4231, type: 2}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 0
-  m_LightProbeAnchor: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_SortingLayerID: 0
   serializedVersion: 2
   m_CameraVelocityScale: 0
   m_StretchParticles: 3
@@ -128,4 +141,3 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100000}
   m_IsPrefabParent: 1
-  m_IsExploded: 1

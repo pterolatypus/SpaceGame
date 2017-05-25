@@ -363,7 +363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15568b6f0f94aa04aad96e690366a3eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  messageText: 
+  __messageText: 
   loadingMessage: {fileID: 130234159}
 --- !u!4 &769770987
 Transform:

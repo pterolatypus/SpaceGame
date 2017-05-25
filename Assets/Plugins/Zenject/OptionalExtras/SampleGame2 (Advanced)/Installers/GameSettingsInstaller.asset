@@ -59,7 +59,6 @@ MonoBehaviour:
     EnemyStateFollow:
       StrafeMultiplier: 0.5
       StrafeChangeInterval: 0.8
-      TeleportDistance: 80
       TeleportNewDistance: 40
     EnemyStateAttack:
       ShootSound: {fileID: 8300000, guid: aa66f043685a31e4bb90d0b6128bc3e1, type: 3}

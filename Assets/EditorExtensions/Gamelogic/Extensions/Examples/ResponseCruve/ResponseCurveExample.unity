@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 254591e6a3c5d08468a2e64968e814f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  messageText: 
+  __messageText: 
   inputs:
   - 0
   - 0.5
