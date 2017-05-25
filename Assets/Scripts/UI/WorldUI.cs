@@ -44,7 +44,7 @@ namespace UI {
         #region Private Methods
 
         // Use this for initialization
-        private void Start() {
+        private void Awake() {
             _dictionary = new Dictionary<GameObject, RadarObject>();
         }
 
