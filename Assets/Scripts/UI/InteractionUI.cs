@@ -47,7 +47,7 @@ namespace UI {
         }
 
         public void Start() {
-            Player.EnableControls(false);
+            Player.ControlsEnabled = false;
             Vector3 planetWorldPos = Source.GameObject.transform.position;
 
             _playerCamera.LockToPosition(planetWorldPos);
@@ -108,7 +108,7 @@ namespace UI {
 
         private void Close() {
             Destroy(gameObject);
-            Player.EnableControls(true);
+            Player.ControlsEnabled = true;
             _playerCamera.FollowTarget(Player.gameObject);
             _worldUI.SetActive(true);
         }

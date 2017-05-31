@@ -148,8 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c7f24455295f8b48891224cbdb5febb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NumberOfSystems: 1
-  Radar: {fileID: 1773459526}
+  _radar: {fileID: 1773459526}
   _player: {fileID: 960961109}
 --- !u!1 &165167777
 GameObject:
@@ -536,7 +535,7 @@ RectTransform:
   m_GameObject: {fileID: 870179490}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.590625, y: 0.590625, z: 0.590625}
   m_Children:
   - {fileID: 1407688751}
   - {fileID: 661362035}
@@ -545,9 +544,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 567, y: 319}
+  m_SizeDelta: {x: 1920, y: 1079.6748}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &870179495
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -711,9 +710,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05183f75e8dc6cf4ea5658433f118f34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BoostFactor: 4
-  Thrust: 10
   _txtInteract: {fileID: 661362036}
+  _boostFactor: 10
+  _thrust: 4
 --- !u!50 &960961110
 Rigidbody2D:
   serializedVersion: 4
@@ -969,9 +968,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d8eac54b31bc1244aedf4ff8e764eb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CameraFollowDelay: 0.3
-  CameraZoomFactor: 0.5
-  Player: {fileID: 960961105}
+  _player: {fileID: 960961105}
 --- !u!114 &1547632089
 MonoBehaviour:
   m_ObjectHideFlags: 0

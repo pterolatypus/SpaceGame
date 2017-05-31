@@ -1,5 +1,7 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 using Model;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -7,100 +9,106 @@ using UnityEngine.UI;
 namespace Controllers {
     public class PlayerShipController : MonoBehaviour {
 
-        #region Public Fields
-
-        [FormerlySerializedAs("boostFactor")] public float BoostFactor = 4;
-        [FormerlySerializedAs("thrust")] public float Thrust = 1f;
-
-        #endregion Public Fields
-
         #region Private Fields
 
         private const float AnimSpeedMax = 2f;
         private const float AnimSpeedMin = 0.5f;
-        [Component]private Animator _anim;
-        private bool _controls = true;
         private IInteractable _interactionTarget;
-        private float _maxSpeed = 1f;
+        private float _greatestObservedSpeed = 1f;
+        [Component] private Animator _anim;
         [Component]private Rigidbody2D _rb;
-        [FormerlySerializedAs("txtInteract")] [SerializeField] private Text _txtInteract;
+        [SerializeField] private Text _txtInteract;
+        [SerializeField] private float _boostFactor = 4;
+        [SerializeField] private float _thrust = 1f;
 
         #endregion Private Fields
 
-        #region Public Methods
+        #region Internal Properties
 
-        internal void EnableControls(bool enabled) {
-            _controls = enabled;
+        internal bool ControlsEnabled { get; set; }
+
+        #endregion Internal Properties
+
+        #region Private Properties
+
+        private bool HasInteractionTarget {
+            get { return (_interactionTarget != null); }
         }
 
-        #endregion Public Methods
+        #endregion Private Properties
 
         #region Private Methods
 
+        [UsedImplicitly]
+        private void Start() {
+            this.LoadComponents();
+            ControlsEnabled = true;
+        }
+
+        [UsedImplicitly]
+        private void Update() {
+            if (ControlsEnabled) TurnToFaceCursor();
+            if (Input.GetButtonDown("Interact") && ControlsEnabled && HasInteractionTarget) _interactionTarget.Interact(this);
+        }
+
+        private void TurnToFaceCursor() {
+            transform.up = GetDirectionToCursor();
+        }
+
+        private Vector3 GetDirectionToCursor() {
+            return GetAdjustedCursorPosition() - transform.position;
+        }
+
+        private static Vector3 GetAdjustedCursorPosition() {
+            Vector3 cursorPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            cursorPos.z = 0;
+            return cursorPos;
+        }
+
+        [UsedImplicitly]
         private void FixedUpdate() {
-            _anim.SetBool("shipIsMoving", Input.GetButton("Forward") && _controls);
-            float thrust = Input.GetButton("Boost") ? Thrust * BoostFactor : Thrust;
-            if (Input.GetButton("Forward") && _controls) {
-                _rb.AddForce(thrust * transform.up);
-            }
+            HandleThrustControl();
+            UpdateAnimation();
+        }
 
-            float curSpd = GetComponent<Rigidbody2D>().velocity.magnitude;
-            _maxSpeed = Mathf.Max(curSpd, _maxSpeed);
-            float animSpeed = AnimSpeedMin + (curSpd / _maxSpeed * (AnimSpeedMax - AnimSpeedMin));
+        private void HandleThrustControl() {
+            float thrust = Input.GetButton("Boost") ? _thrust * _boostFactor : _thrust;
+            if (Input.GetButton("Forward") && ControlsEnabled) _rb.AddForce(thrust * transform.up);
+        }
+
+        private void UpdateAnimation() {
+            bool isAnimated = ControlsEnabled && Input.GetButton("Forward");
+            _anim.SetBool("shipIsMoving", isAnimated);
+            if (isAnimated) UpdateAnimationSpeed();
+        }
+
+        private void UpdateAnimationSpeed() {
+            float currentSpeed = _rb.velocity.magnitude;
+            _greatestObservedSpeed = Mathf.Max(currentSpeed, _greatestObservedSpeed);
+            float animSpeed = AnimSpeedMin + (currentSpeed / _greatestObservedSpeed * (AnimSpeedMax - AnimSpeedMin));
             _anim.SetFloat("animSpeed", animSpeed);
-
-            if (Input.GetButtonDown("Relocate") && _controls) {
-                //GameObject.Find("GameController").GetComponent<GameController>().Relocate();
-            }
         }
 
-        private void OnTriggerEnter2D(Collider2D other) {
-            var collisionOrbital = other.gameObject.GetComponent<WorldOrbital>();
-            Orbital orbitalSource = collisionOrbital.Source;
-            var interactableSource = orbitalSource as IInteractable;
-
-            if (interactableSource != null) {
-                SetInteractionTarget(interactableSource);
-            }
+        [UsedImplicitly]
+        private void OnTriggerEnter2D([NotNull] Collider2D other) {
+            var interactableSource = other.gameObject.GetComponent<WorldOrbital>().Source as IInteractable;
+            if (interactableSource != null) SetInteractionTarget(interactableSource);
         }
 
-        private void OnTriggerExit2D(Collider2D other) {
-            var collisionOrbital = other.gameObject.GetComponent<WorldOrbital>();
-            Orbital orbitalSource = collisionOrbital.Source;
-            var interactableSource = orbitalSource as IInteractable;
-
-            if (interactableSource != null) {
-                SetInteractionTarget(null);
-            }
+        [UsedImplicitly]
+        private void OnTriggerExit2D([NotNull] Collider2D other) {
+            var interactableSource = other.gameObject.GetComponent<WorldOrbital>().Source as IInteractable;
+            if (interactableSource != null) SetInteractionTarget(null);
         }
 
         private void SetInteractionTarget([CanBeNull] IInteractable interactable) {
             _interactionTarget = interactable;
-            if (_interactionTarget == null) {
-                _txtInteract.gameObject.SetActive(false);
-            }
-            else {
-                _txtInteract.text = _interactionTarget.GetInteractionText();
-                _txtInteract.gameObject.SetActive(true);
-            }
+            UpdateInteractionText();
         }
 
-        // Use this for initialization
-        private void Start() {
-           this.LoadComponents();
-        }
-
-        // Update is called once per frame
-        private void Update() {
-            Vector3 cursorPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            cursorPos.z = 0;
-            Vector3 dir = cursorPos - transform.position;
-            if (_controls) {
-                transform.up = dir;
-            }
-            if (Input.GetButtonDown("Interact") && _controls && _interactionTarget != null) {
-                _interactionTarget.Interact(this);
-            }
+        private void UpdateInteractionText() {
+            if (HasInteractionTarget) _txtInteract.text = _interactionTarget.GetInteractionText();
+            _txtInteract.gameObject.SetActive(HasInteractionTarget);
         }
 
         #endregion Private Methods
