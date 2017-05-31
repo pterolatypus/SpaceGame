@@ -109,7 +109,7 @@ namespace UI {
         private void Close() {
             Destroy(gameObject);
             Player.EnableControls(true);
-            _playerCamera.LockToPosition(null);
+            _playerCamera.FollowTarget(Player.gameObject);
             _worldUI.SetActive(true);
         }
 
