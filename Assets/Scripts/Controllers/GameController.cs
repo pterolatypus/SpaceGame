@@ -1,4 +1,5 @@
-﻿using Model;
+﻿using JetBrains.Annotations;
+using Model;
 using UI;
 using UnityEngine;
 using Random = System.Random;
@@ -6,64 +7,65 @@ using Random = System.Random;
 namespace Controllers {
     public class GameController : MonoBehaviour {
 
-        #region Public Fields
-
-        public int NumberOfSystems = 100;
-        public WorldUI Radar;
-
-        #endregion Public Fields
-
         #region Private Fields
 
         private StarSystem _currentStarSystem;
         private Galaxy _galaxy;
+
+        [SerializeField] private readonly int _numberOfSystems = 100;
+        [SerializeField] private WorldUI _radar;
         [SerializeField] private PlayerShipController _player;
 
         #endregion Private Fields
 
-        #region Public Methods
-
-        public void Relocate() {
-            LoadSystem(_galaxy.GetRandomStar());
-        }
-
-        #endregion Public Methods
-
         #region Private Methods
 
-        // Use this for initialization
+        [UsedImplicitly]
         private void Awake() {
-            _galaxy = new Galaxy(NumberOfSystems);
+            _galaxy = new Galaxy(_numberOfSystems);
         }
 
+        [UsedImplicitly]
         private void Start() {
-            LoadSystem(_galaxy.Home);
+            TravelToStarSystem(_galaxy.Home);
         }
 
-        private void LoadSystem(StarSystem star) {
-            if (_currentStarSystem != null) {
-                _currentStarSystem.Unload();
-                Radar.Clear();
-            }
+        private void TravelToStarSystem(StarSystem star) {
+            UnloadCurrentSystem();
+            LoadNewSystem(star);
+            RefreshRadar();
+            RandomisePlayerPosition();
+        }
 
+        private void UnloadCurrentSystem() {
+            if (_currentStarSystem != null) _currentStarSystem.Unload();
+        }
+
+        private void LoadNewSystem(StarSystem star) {
             _currentStarSystem = star;
             _currentStarSystem.Load();
-
-            foreach (GameObject obj in _currentStarSystem) {
-                Radar.AddTrackingObject(obj);
-            }
-
-            float angle = (float) new Random().NextDouble() * 360;
-            const int radius = 200;
-
-            var x = (int)(radius * Mathf.Cos(angle));
-            var y = (int)(radius * Mathf.Sin(angle));
-
-            _player.transform.position = new Vector3(x, y, 0);
         }
 
-        // Update is called once per frame
-        private void Update() {
+        private void RefreshRadar() {
+            _radar.Clear();
+
+            foreach (GameObject obj in _currentStarSystem) {
+                _radar.AddTrackingObject(obj);
+            }
+        }
+
+        private void RandomisePlayerPosition() {
+            Vector3 newPosition = GetRandomPositionAtRadius(200f);
+            _player.transform.position = newPosition;
+        }
+
+        private static Vector3 GetRandomPositionAtRadius(float radius) {
+            float angle = (float) new Random().NextDouble() * 360;
+
+            var x = (int) (radius * Mathf.Cos(angle));
+            var y = (int) (radius * Mathf.Sin(angle));
+
+            return new Vector3(x, y, 0);
         }
 
         #endregion Private Methods
