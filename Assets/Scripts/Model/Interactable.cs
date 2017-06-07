@@ -1,7 +1,7 @@
 ﻿using Controllers;
 
 namespace Model {
-    internal interface IInteractable {
+    internal interface Interactable {
 
         #region Public Methods
 

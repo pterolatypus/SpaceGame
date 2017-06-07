@@ -8,7 +8,7 @@ using Object = UnityEngine.Object;
 using Random = System.Random;
 
 namespace Model {
-    public partial class Planetoid : Orbital, IInteractable {
+    public partial class Planetoid : Orbital, Interactable {
 
         #region Public Fields
 
