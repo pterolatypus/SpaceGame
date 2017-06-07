@@ -1,0 +1,419 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>InspectorGadgets</name>
+    </assembly>
+    <members>
+        <member name="T:InspectorGadgets.ColorAttribute">
+            <summary>
+            Causes the attributed field to be drawn in a specific color.
+            </summary>
+        </member>
+        <member name="F:InspectorGadgets.ColorAttribute.Color">
+            <summary>The color to use.</summary>
+        </member>
+        <member name="M:InspectorGadgets.ColorAttribute.#ctor(System.Single,System.Single,System.Single)">
+            <summary>Initialises the color with the specified red, green, and blue values.</summary>
+        </member>
+        <member name="T:InspectorGadgets.EulerAttribute">
+            <summary>
+            Causes the attributed <see cref="T:UnityEngine.Quaternion"/> field to be drawn as Euler Angles.
+            </summary>
+        </member>
+        <member name="T:InspectorGadgets.ToolbarAttribute">
+            <summary>
+            Marks an enum or string field to be drawn in the inspector as a series of toggle buttons rather than the usual
+            dropdown list or text field.
+            </summary>
+        </member>
+        <member name="F:InspectorGadgets.ToolbarAttribute.Labels">
+            <summary>
+            The labels for each button in the toolbar. Enums will use their own names.
+            </summary>
+        </member>
+        <member name="M:InspectorGadgets.ToolbarAttribute.#ctor">
+            <summary>
+            Constructs a new <see cref="T:InspectorGadgets.ToolbarAttribute"/>.
+            You must specify the <see cref="F:InspectorGadgets.ToolbarAttribute.Labels"/> unless the attributed field is an enum.
+            </summary>
+        </member>
+        <member name="M:InspectorGadgets.ToolbarAttribute.#ctor(UnityEngine.GUIContent[])">
+            <summary>
+            Constructs a new <see cref="T:InspectorGadgets.ToolbarAttribute"/> using the specified labels (not required for enums).
+            </summary>
+        </member>
+        <member name="M:InspectorGadgets.ToolbarAttribute.#ctor(System.String[])">
+            <summary>
+            Constructs a new <see cref="T:InspectorGadgets.ToolbarAttribute"/> using the specified labels (not required for enums).
+            </summary>
+        </member>
+        <member name="T:InspectorGadgets.InspectableAttribute">
+            <summary><see cref="T:InspectorGadgets.Editor`1"/> uses these attributes to add extra elements to the inspector.</summary>
+        </member>
+        <member name="P:InspectorGadgets.InspectableAttribute.When">
+            <summary>Determines when this attribute should be active.</summary>
+        </member>
+        <member name="T:InspectorGadgets.ButtonAttribute">
+            <summary>
+            <see cref="T:InspectorGadgets.Editor`1"/> uses this attribute to add a button at the bottom of the default inspector to run the marked method.
+            </summary>
+        </member>
+        <member name="P:InspectorGadgets.ButtonAttribute.Label">
+            <summary>The label to display on the button. If not set, it will use the name of the method.</summary>
+        </member>
+        <member name="P:InspectorGadgets.ButtonAttribute.SetDirty">
+            <summary>If true, clicking the button will automatically call <see cref="M:UnityEditor.EditorUtility.SetDirty(UnityEngine.Object)"/> after invoking the method.</summary>
+        </member>
+        <member name="T:InspectorGadgets.LabelAttribute">
+            <summary>
+            <see cref="T:InspectorGadgets.Editor`1"/> uses this attribute to add a label at the bottom of the default inspector to display the value of the marked property.
+            </summary>
+        </member>
+        <member name="P:InspectorGadgets.LabelAttribute.Label">
+            <summary>The label to use as a prefix before the value. If not set, it will use the name of the attributed member.</summary>
+        </member>
+        <member name="P:InspectorGadgets.LabelAttribute.HideWhenNull">
+            <summary>If true, the label will be hidden when the value is null.</summary>
+        </member>
+        <member name="T:InspectorGadgets.ReadonlyAttribute">
+            <summary>
+            Causes the attributed field to be greyed out and un-editable in the inspector.
+            </summary>
+        </member>
+        <member name="F:InspectorGadgets.ReadonlyAttribute.When">
+            <summary>
+            Indicates when the field should be greyed out.
+            </summary>
+        </member>
+        <member name="M:InspectorGadgets.ReadonlyAttribute.#ctor(InspectorGadgets.EditorState)">
+            <summary>
+            Constructs a new <see cref="T:InspectorGadgets.ReadonlyAttribute"/> to apply its effects in the specified <see cref="T:InspectorGadgets.EditorState"/>.
+            </summary>
+        </member>
+        <member name="T:InspectorGadgets.ComponentFindMethod">
+            <summary>Specifies how to acquire a component reference.</summary>
+        </member>
+        <member name="F:InspectorGadgets.ComponentFindMethod.GetComponent">
+            <summary><see cref="M:UnityEngine.GameObject.GetComponent``1"/>.</summary>
+        </member>
+        <member name="F:InspectorGadgets.ComponentFindMethod.GetComponentInParent">
+            <summary><see cref="M:UnityEngine.GameObject.GetComponentInParent``1"/>.</summary>
+        </member>
+        <member name="F:InspectorGadgets.ComponentFindMethod.GetComponentInChildren">
+            <summary><see cref="M:UnityEngine.GameObject.GetComponentInChildren``1"/>.</summary>
+        </member>
+        <member name="F:InspectorGadgets.ComponentFindMethod.FindObjectOfType">
+            <summary><see cref="M:UnityEngine.Object.FindObjectOfType``1"/>.</summary>
+        </member>
+        <member name="F:InspectorGadgets.ComponentFindMethod.AddComponent">
+            <summary><see cref="M:UnityEngine.GameObject.AddComponent``1"/>.</summary>
+        </member>
+        <member name="F:InspectorGadgets.ComponentFindMethod.Search">
+            <summary>
+            Tries various search methods until it finds something: first GetComponent, then GetComponentInParent,
+            then GetComponentInChildren, then FindObjectOfType.
+            </summary>
+        </member>
+        <member name="F:InspectorGadgets.ComponentFindMethod.SearchOrAddComponent">
+            <summary>Uses <see cref="F:InspectorGadgets.ComponentFindMethod.Search"/>, and if it gets null it uses AddComponent.</summary>
+        </member>
+        <member name="T:InspectorGadgets.Utils">
+            <summary>
+            Various utility methods used by <see cref="N:InspectorGadgets"/>.
+            </summary>
+        </member>
+        <member name="M:InspectorGadgets.Utils.FindComponent``1(UnityEngine.GameObject,InspectorGadgets.ComponentFindMethod)">
+            <summary>
+            Tries to find or add a component based on the specified <see cref="T:InspectorGadgets.ComponentFindMethod"/>.
+            </summary>
+        </member>
+        <member name="M:InspectorGadgets.Utils.TryFindComponent``1(UnityEngine.GameObject,``0@,InspectorGadgets.ComponentFindMethod)">
+            <summary>
+            Does nothing if the 'component' isn't null. Otherwise, this method tries to find or add a component based
+            on the specified <see cref="T:InspectorGadgets.ComponentFindMethod"/> and returns true if successful.
+            </summary>
+        </member>
+        <member name="M:InspectorGadgets.Utils.Contains(InspectorGadgets.ComponentFindMethod,InspectorGadgets.ComponentFindMethod)">
+            <summary>Returns true if the specified 'method' includes all the flags of 'contains'.</summary>
+        </member>
+        <member name="M:InspectorGadgets.Utils.AddComponent``2(UnityEngine.GameObject,``1)">
+            <summary>
+            Adds the specified component type and calls its <see cref="M:InspectorGadgets.ConstructableBehaviour`1.OnConstructor(`0)"/>
+            method with the provided 'parameter'.
+            </summary>
+        </member>
+        <member name="M:InspectorGadgets.Utils.MarkAsInitialised(UnityEngine.MonoBehaviour)">
+            <summary>
+            Indicates that the specified 'behaviour' has been initialised. You would usually call this method from
+            inside an initialisation method of a type marked with a [<see cref="T:InspectorGadgets.RequireInitialisationAttribute"/>].
+            </summary>
+        </member>
+        <member name="M:InspectorGadgets.Utils.ConvertCamelCaseToFriendly(System.String,System.Boolean)">
+            <summary>
+            Adds spaces to 'camelCase' before each uppercase letter.
+            </summary>
+        </member>
+        <member name="M:InspectorGadgets.Utils.ConvertCamelCaseToFriendly(System.Text.StringBuilder,System.String,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Adds spaces to 'camelCase' before each uppercase letter.
+            </summary>
+        </member>
+        <member name="M:InspectorGadgets.Utils.ConvertFieldNameToFriendly(System.String,System.Boolean)">
+            <summary>
+            Adds spaces to 'fieldName' before each uppercase letter and removes any underscores from the start.
+            </summary>
+        </member>
+        <member name="M:InspectorGadgets.Utils.GetReference(System.Type)">
+            <summary>
+            Returns the full name of a 'type' as it would appear in C# code.
+            <para></para>
+            For example, typeof(List&lt;float&gt;).FullName would give you:
+            System.Collections.Generic.List`1[[System.Single, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]
+            <para></para>
+            This method would instead return System.Collections.Generic.List&lt;float&gt;.
+            <para></para>
+            Note that all returned values are stored in a dictionary to speed up repeated use.
+            </summary>
+        </member>
+        <member name="M:InspectorGadgets.Utils.AppendGenericArguments(System.Text.StringBuilder,System.Type,System.Int32@)">
+            <summary>
+            Appends the generic arguments of 'type' (after skipping the specified number).
+            </summary>
+        </member>
+        <member name="M:InspectorGadgets.Utils.GetReference(System.Reflection.MemberInfo)">
+            <summary>
+            Returns the full name of a 'member' as it would appear in C# code.
+            <para></para>
+            For example, passing this method info in as its own parameter would return "<see cref="T:InspectorGadgets.Utils"/>.GetReference".
+            <para></para>
+            Note that when 'member' is a <see cref="T:System.Type"/>, this method calls <see cref="M:InspectorGadgets.Utils.GetReference(System.Type)"/> instead.
+            </summary>
+        </member>
+        <member name="M:InspectorGadgets.Utils.AppendReference(System.Text.StringBuilder,System.Reflection.MemberInfo)">
+            <summary>
+            Appends the full name of a 'member' as it would appear in C# code.
+            <para></para>
+            For example, passing this method info in as its own parameter would append "<see cref="T:InspectorGadgets.Utils"/>.AppendReference".
+            <para></para>
+            Note that when 'member' is a <see cref="T:System.Type"/>, this method calls <see cref="M:InspectorGadgets.Utils.GetReference(System.Type)"/> instead.
+            </summary>
+        </member>
+        <member name="M:InspectorGadgets.Utils.GetAttributedFields``1(System.Type,System.Reflection.BindingFlags,System.Collections.Generic.List{``0},System.Collections.Generic.List{System.Reflection.FieldInfo})">
+            <summary>Get all fields with the specified attribute in 'type'.</summary>
+        </member>
+        <member name="M:InspectorGadgets.Utils.GetAttributedProperties``1(System.Type,System.Reflection.BindingFlags,System.Collections.Generic.List{``0},System.Collections.Generic.List{System.Reflection.PropertyInfo})">
+            <summary>Get all properties with the specified attribute in 'type'.</summary>
+        </member>
+        <member name="M:InspectorGadgets.Utils.GetAttributedMethods``1(System.Type,System.Reflection.BindingFlags,System.Collections.Generic.List{``0},System.Collections.Generic.List{System.Reflection.MethodInfo})">
+            <summary>Get all methods with the specified attribute in 'type'.</summary>
+        </member>
+        <member name="M:InspectorGadgets.Utils.Repaint">
+            <summary>Repaint the current view.</summary>
+        </member>
+        <member name="P:InspectorGadgets.Utils.MoveSnapX">
+            <summary>The Unity editor's "Move X" snap setting (as specified in Edit/Snap Settings).</summary>
+        </member>
+        <member name="P:InspectorGadgets.Utils.MoveSnapY">
+            <summary>The Unity editor's "Move Y" snap setting (as specified in Edit/Snap Settings).</summary>
+        </member>
+        <member name="P:InspectorGadgets.Utils.MoveSnapZ">
+            <summary>The Unity editor's "Move Z" snap setting (as specified in Edit/Snap Settings).</summary>
+        </member>
+        <member name="P:InspectorGadgets.Utils.MoveSnapVector">
+            <summary>(<see cref="P:InspectorGadgets.Utils.MoveSnapX"/>, <see cref="P:InspectorGadgets.Utils.MoveSnapY"/>, <see cref="P:InspectorGadgets.Utils.MoveSnapZ"/>).</summary>
+        </member>
+        <member name="P:InspectorGadgets.Utils.RotationSnap">
+            <summary>The Unity editor's "Rotation" snap setting (as specified in Edit/Snap Settings).</summary>
+        </member>
+        <member name="P:InspectorGadgets.Utils.RotationSnapVector">
+            <summary>(<see cref="P:InspectorGadgets.Utils.RotationSnap"/>, <see cref="P:InspectorGadgets.Utils.RotationSnap"/>, <see cref="P:InspectorGadgets.Utils.RotationSnap"/>).</summary>
+        </member>
+        <member name="P:InspectorGadgets.Utils.ScaleSnap">
+            <summary>The Unity editor's "Scale" snap setting (as specified in Edit/Snap Settings).</summary>
+        </member>
+        <member name="P:InspectorGadgets.Utils.ScaleSnapVector">
+            <summary>(<see cref="P:InspectorGadgets.Utils.ScaleSnap"/>, <see cref="P:InspectorGadgets.Utils.ScaleSnap"/>, <see cref="P:InspectorGadgets.Utils.ScaleSnap"/>).</summary>
+        </member>
+        <member name="M:InspectorGadgets.Utils.SnapPosition(UnityEngine.Vector3)">
+            <summary>Snaps the given 'position' to the grid (as specified in Edit/Snap Settings).</summary>
+        </member>
+        <member name="M:InspectorGadgets.Utils.SnapRotation(UnityEngine.Vector3)">
+            <summary>Snaps the given 'rotationEuler' to the nearest snap increment on all axes (as specified in Edit/Snap Settings).</summary>
+        </member>
+        <member name="M:InspectorGadgets.Utils.SnapRotation(UnityEngine.Quaternion)">
+            <summary>Snaps the given 'rotation' to the nearest snap increment on all axes (as specified in Edit/Snap Settings).</summary>
+        </member>
+        <member name="M:InspectorGadgets.Utils.SnapScale(UnityEngine.Vector3)">
+            <summary>Snaps the given 'scale' to the nearest snap increment (as specified in Edit/Snap Settings).</summary>
+        </member>
+        <member name="M:InspectorGadgets.Utils.IsSnapped(System.Single,System.Single)">
+            <summary>Returns true if 'value' is approximately equal to a multiple of 'snap'.</summary>
+        </member>
+        <member name="M:InspectorGadgets.Utils.AppendTransformPath(System.Text.StringBuilder,UnityEngine.Transform)">
+            <summary>
+            Appends the full transform path to the target with slashes between the names of each of its parents, much like a file path.
+            </summary>
+        </member>
+        <member name="M:InspectorGadgets.Utils.IsNow(InspectorGadgets.EditorState)">
+            <summary>
+            Returns true if the Unity editor is currently in the specified 'state'.
+            </summary>
+        </member>
+        <member name="T:InspectorGadgets.ConstructableBehaviour`1">
+            <summary>[Editor Only]
+            This class provides a workaround for the lack of support for <see cref="T:MonoBehaviour"/> constructors in Unity.
+            Inheriting from it allows the child type to ensure that it is initialised properly, otherwise an exception will
+            be thrown. Note that this verification is only performed in the Unity Editor, not at runtime.
+            <para></para>
+            When adding the component via script, you must use <see cref="M:InspectorGadgets.Utils.AddComponent``2(UnityEngine.GameObject,``1)"/>
+            instead of <see cref="M:UnityEngine.GameObject.AddComponent``1"/>.
+            <para></para>
+            If the child passes 'allowSerialization = false' into this constructor, the exception will be thrown any time
+            it is manually added to a <see cref="T:UnityEngine.GameObject"/>  or deserialized (generally as part of a scene or prefab).
+            </summary>
+        </member>
+        <member name="M:InspectorGadgets.ConstructableBehaviour`1.#ctor(System.Boolean)">
+            <summary>
+            Calls <see cref="M:InspectorGadgets.ConstructableBehaviour`1.OnConstructor(`0)"/> with the parameter from
+            <see cref="M:InspectorGadgets.Utils.AddComponent``2(UnityEngine.GameObject,``1)"/> and throws an exception if
+            <see cref="M:UnityEngine.GameObject.AddComponent``1"/> (or any of its overloads) was used.
+            <para></para>
+            Specifying 'allowSerialization = false' causes it to also throw an exception if an instance is manually
+            added to a <see cref="T:UnityEngine.GameObject"/> or deserialized (generally as part of a scene or prefab).
+            </summary>
+        </member>
+        <member name="M:InspectorGadgets.ConstructableBehaviour`1.#ctor">
+            <summary>
+            Calls <see cref="M:InspectorGadgets.ConstructableBehaviour`1.OnConstructor(`0)"/> with the parameter from
+            <see cref="M:InspectorGadgets.Utils.AddComponent``2(UnityEngine.GameObject,``1)"/> and throws an exception if
+            <see cref="M:UnityEngine.GameObject.AddComponent``1"/> (or any of its overloads) was used.
+            </summary>
+        </member>
+        <member name="M:InspectorGadgets.ConstructableBehaviour`1.OnConstructor(`0)">
+            <summary>
+            Called by the constructor with the parameter from <see cref="M:InspectorGadgets.Utils.AddComponent``2(UnityEngine.GameObject,``1)"/>.
+            <para></para>
+            Note that this occurs before the component has been initialised by Unity, meaning that none of the
+            <see cref="T:MonoBehaviour"/> properties such as name and gameObject can be used. It may also be called from
+            a non-main thread, preventing access to many of the Unity Engine features.
+            </summary>
+        </member>
+        <member name="M:InspectorGadgets.ConstructableBehaviour`1.AddComponent``1(UnityEngine.GameObject,`0)">
+            <summary>
+            Adds the specified component type and calls its <see cref="M:InspectorGadgets.ConstructableBehaviour`1.OnConstructor(`0)"/>
+            method with the provided 'parameter'.
+            </summary>
+        </member>
+        <member name="T:InspectorGadgets.RequireAssignmentAttribute">
+            <summary>[Editor Only, Pro Only]
+            Indicates that a field or property must be given a non-default value immediately after an instance of the
+            declaring type is created, otherwise a warning is logged. Note that the declaring type must have a
+            [<see cref="T:InspectorGadgets.RequireInitialisationAttribute"/>] and inherit from the <see cref="T:MonoBehaviour"/> class in this
+            assembly (rather than <see cref="T:UnityEngine.MonoBehaviour"/>) for this to work.
+            <para></para>
+            If the attributed member is drawn in the inspector, it will be highlighted in red when it has the default value.
+            </summary>
+        </member>
+        <member name="M:InspectorGadgets.RequireAssignmentAttribute.ToString">
+            <summary>
+            Returns the full name of the attributed field or property.
+            </summary>
+        </member>
+        <member name="T:InspectorGadgets.InitialisationType">
+            <summary>Determines the circumstances under which initialisation is required.</summary>
+        </member>
+        <member name="F:InspectorGadgets.InitialisationType.AddComponent">
+            <summary>
+            Require initialisation when <see cref="T:UnityEngine.GameObject"/>.AddComponent is used to create an instance
+            of the target script.
+            </summary>
+        </member>
+        <member name="F:InspectorGadgets.InitialisationType.Instantiate">
+            <summary>
+            Require initialisation when <see cref="T:UnityEngine.Object"/>.Instantiate is used on a prefab containing the
+            target.
+            </summary>
+        </member>
+        <member name="F:InspectorGadgets.InitialisationType.Deserialize">
+            <summary>
+            Require initialisation when the target is deserialized as part of a scene or prefab.
+            </summary>
+        </member>
+        <member name="F:InspectorGadgets.InitialisationType.All">
+            <summary>
+            Require initialisation whenever an instance of the target is created in any way.
+            </summary>
+        </member>
+        <member name="T:InspectorGadgets.RequireInitialisationAttribute">
+            <summary>[Editor Only, Pro Only]
+            When applied to a <see cref="T:UnityEngine.MonoBehaviour"/> script, this attribute requires all instances of that
+            script to have <see cref="M:InspectorGadgets.Utils.MarkAsInitialised(UnityEngine.MonoBehaviour)"/> called on them as soon as they are created in order to
+            "initialise" them, otherwise a warning will be logged.
+            <para></para>
+            The default rules <see cref="F:InspectorGadgets.InitialisationType.AddComponent"/> and <see cref="F:InspectorGadgets.InitialisationType.Instantiate"/> will enforce this
+            requirement whenever an instance of the script is created by code.
+            <para></para>
+            To prevent the user from adding the component manually in the Unity Editor, you can give the script an
+            [<see cref="T:UnityEngine.AddComponentMenu"/>("")] attribute to exclude it from the Component menu.
+            </summary>
+        </member>
+        <member name="M:InspectorGadgets.RequireInitialisationAttribute.#ctor(InspectorGadgets.InitialisationType)">
+            <param name="type">Specifies the circumstances under which initialisation is required.</param>
+        </member>
+        <member name="M:InspectorGadgets.RequireInitialisationAttribute.ShouldEnforce(InspectorGadgets.InitialisationType)">
+            <summary>Returns true if this attribute's rule contains the specified value.</summary>
+        </member>
+        <member name="T:InspectorGadgets.EditorState">
+            <summary>
+            Represents an editor state which can be used as a condition: play mode, edit mode, or ayways.
+            </summary>
+        </member>
+        <member name="F:InspectorGadgets.EditorState.Always">
+            <summary>All the time, regardless of the current state of the Unity editor.</summary>
+        </member>
+        <member name="F:InspectorGadgets.EditorState.Playing">
+            <summary>When the Unity editor is in play mode.</summary>
+        </member>
+        <member name="F:InspectorGadgets.EditorState.Editing">
+            <summary>When the Unity editor is not in play mode.</summary>
+        </member>
+        <member name="T:InspectorGadgets.Editor`1">
+            <summary>[Pro-Only]
+            Base class to derive custom editors from, with a bunch of additional features on top of Unity's base
+            <see cref="T:UnityEditor.Editor"/> class.
+            <para></para>
+            Doesn't draw the target's "Script" field to save inspector space and reduce clutter.
+            <para></para>
+            You can Middle Click anywhere in the inspector area to open the script in your script editor or Ctrl + Middle
+            Click to open its editor script (or create one if none exists already).
+            <para></para>
+            Provides type-casted versions of <see cref="P:UnityEditor.Editor.target"/> and <see cref="P:UnityEditor.Editor.targets"/> so you don't
+            always have to do it yourself (<see cref="P:InspectorGadgets.Editor`1.Target"/> and <see cref="P:InspectorGadgets.Editor`1.Targets"/> respectively).
+            </summary>
+        </member>
+        <member name="P:InspectorGadgets.Editor`1.Current">
+            <summary>The editor currently being drawn.</summary>
+        </member>
+        <member name="P:InspectorGadgets.Editor`1.Target">
+            <summary>The object being inspected (<see cref="P:UnityEditor.Editor.target"/> casted to T).</summary>
+        </member>
+        <member name="P:InspectorGadgets.Editor`1.Targets">
+            <summary>An array of all objects being inspected (<see cref="P:UnityEditor.Editor.targets"/> casted to T).</summary>
+        </member>
+        <member name="T:MonoBehaviour">
+            <summary>[Editor Only]
+            The base class which hides <see cref="T:UnityEngine.MonoBehaviour"/> in the Unity Editor in order for
+            <see cref="T:InspectorGadgets.RequireInitialisationAttribute"/> and <see cref="T:InspectorGadgets.RequireAssignmentAttribute"/> to do their job. Any
+            class that inherits from <see cref="T:MonoBehaviour"/> without specifying the full
+            <see cref="T:UnityEngine.MonoBehaviour"/> will automatically inherit from this instead (as long as it's in a project
+            that references this assembly).
+            </summary>
+        </member>
+        <member name="M:MonoBehaviour.#ctor">
+            <summary>
+            Checks if this script type has a <see cref="T:InspectorGadgets.RequireInitialisationAttribute"/> and uses the stack trace to
+            determine how it was created so it can react accordingly (based on the attribute's Rule field).
+            </summary>
+        </member>
+    </members>
+</doc>

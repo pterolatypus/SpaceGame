@@ -1,11 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿namespace Model {
+    internal class EmptyOrbital : Orbital {
 
-class EmptyOrbital : Orbital {
+        #region Public Constructors
 
-    public EmptyOrbital(int seed) : base(seed) { }
+        public EmptyOrbital(int seed) : base(seed) {
+        }
 
-    public override void Load() {}
+        #endregion Public Constructors
+
+        #region Public Methods
+
+        internal override void Load() {
+        }
+
+        #endregion Public Methods
+
+    }
 }

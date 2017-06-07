@@ -1,24 +1,35 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using UnityEngine.Serialization;
 
-public class CommodityRecord {
+namespace Model {
+    internal class CommodityRecord {
 
-    public float supplyFactor { get; private set; }
-    public TradeInteraction.Commodity commodity { get; private set; }
+        #region Public Properties
 
-    public int stock { get; set; }
+        public TradeInteraction.Commodity Commodity { get; private set; }
+        public int Stock { get; set; }
+        public float SupplyFactor { get; private set; }
 
-    public CommodityRecord(TradeInteraction.Commodity commodity, float supplyFactor) {
-        this.commodity = commodity;
-        this.supplyFactor = supplyFactor;
+        #endregion Public Properties
+
+        #region Public Constructors
+
+        public CommodityRecord(TradeInteraction.Commodity commodity, float supplyFactor) {
+            this.Commodity = commodity;
+            this.SupplyFactor = supplyFactor;
+        }
+
+        #endregion Public Constructors
+
+        #region Public Methods
+
+        public float GetMarketValue() {
+            var stockScale = (float) Math.Exp(-Stock);
+            float supplyScale = 1 / (2 + SupplyFactor);
+            return Commodity.BaseValue * stockScale * supplyScale;
+        }
+
+        #endregion Public Methods
+
     }
-
-    public float getMarketValue() {
-        float stockScale = (float) Math.Exp(-stock);
-        float supplyScale = 1/ (2 + supplyFactor);
-        return commodity.baseValue * stockScale * supplyScale;
-    }
-
 }

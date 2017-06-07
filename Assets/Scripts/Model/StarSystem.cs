@@ -1,119 +1,162 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using Controllers;
+using JetBrains.Annotations;
 using UnityEngine;
+using Random = System.Random;
 
-public class StarSystem : IEnumerable, IEnumerator {
+namespace Model
+{
+    public class StarSystem : IEnumerable<GameObject>
+    {
+        #region Private Fields
 
-    static readonly String[] sizes = {
-        "Dwarf",
-        "Star",
-        "Giant",
-        "Supergiant"
-    };
+        private static readonly List<string> Sizes = new List<string> {
+            "Dwarf",
+            "Star",
+            "Giant",
+            "Supergiant"
+        };
 
-    static readonly String[] temps = {
-        "Red",
-        "Yellow",
-        "White",
-        "Blue"
-    };
+        private static readonly List<string> Temps = new List<string> {
+            "Red",
+            "Yellow",
+            "White",
+            "Blue"
+        };
 
-    public Vector2 coords { get; private set; }
-    public int seed { get; private set; }
-    public String type {
-        get { return temps[temp] + " " + sizes[size]; }
-    }
+        private readonly List<Orbital> _satellites;
+        private GameObject _gameObject;
+        private bool _isGenerated = false;
+        private int _rotation;
+        private GameObject _starPrefab;
+        private int _temp, _size;
 
-    private int enumeratorPosition = -1;
-    public GameObject Current {
-        get {
-            if (enumeratorPosition < 0) return null;
-            if (enumeratorPosition > satellites.Count) throw new IndexOutOfRangeException();
-            if (enumeratorPosition == 0) return gameObject;
-            return satellites[enumeratorPosition - 1].gameObject;
+        #endregion Private Fields
+
+        #region Public Properties
+
+        [NotNull]
+        public string Type
+        {
+            get { return Temps[_temp] + " " + Sizes[_size]; }
         }
-    }
 
-    object IEnumerator.Current {
-        get {
-            if (enumeratorPosition < 0) return null;
-            if (enumeratorPosition > satellites.Count) throw new IndexOutOfRangeException();
-            if (enumeratorPosition == 0) return gameObject;
-            return satellites[enumeratorPosition - 1].gameObject;
+        #endregion Public Properties
+
+        #region Internal Properties
+
+        internal Vector2 Coords { get; private set; }
+
+        #endregion Internal Properties
+
+        #region Private Properties
+
+        private int Seed { get; set; }
+
+        #endregion Private Properties
+
+        #region Internal Constructors
+
+        internal StarSystem(Vector2 coords, int seed)
+        {
+            _satellites = new List<Orbital>();
+            Coords = coords;
+            Seed = seed;
         }
-    }
 
-    private bool isGenerated = false;
-    private int temp, size;
-    private List<Orbital> satellites = new List<Orbital>();
-    private GameObject starPrefab;
-    private int rotation;
-    private GameObject gameObject;
+        #endregion Internal Constructors
 
+        #region Public Methods
 
-    public StarSystem(Vector2 coords, int seed) {
-        this.coords = coords;
-        this.seed = seed;
-    }
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
-    private bool Generate() {
-        if (isGenerated) return false;
-        var rand = new System.Random(seed);
-        temp = rand.Next(temps.Length);
-        size = rand.Next(sizes.Length);
-        int numOrbits = 5 * (size + 1);
-        for (int i = 1; i <= numOrbits; i++) {
-            double r = rand.NextDouble();
-            if (r < 0.5) {
-                Planetoid p = new Planetoid(rand.Next());
-                satellites.Add(p);
-                p.Generate(i);
-            } else {
-                satellites.Add(new EmptyOrbital(0));
+        public IEnumerator<GameObject> GetEnumerator()
+        {
+            foreach (Orbital orbital in _satellites)
+            {
+                if (orbital.GameObject != null) yield return orbital.GameObject;
             }
         }
-        starPrefab = Resources.Load("Prefabs/Stars/" + temps[temp]) as GameObject;
-        rotation = (int) (360 * rand.NextDouble());
-        return true;
-    }
 
-    public void Load() {
-        Debug.Log("Loading system");
-        this.Generate();
-        //instantiate all the game objects
-        gameObject = GameObject.Instantiate(starPrefab, new Vector2 (0,0), Quaternion.Euler(0,0, rotation));
-        var scale = Vector3.one * (size+2)*(size+2);
-        gameObject.transform.localScale = scale;
-        foreach (Orbital obj in satellites) {
-            obj.Load();
+        #endregion Public Methods
+
+        #region Internal Methods
+
+        internal void Load()
+        {
+            Debug.Log("Loading system");
+            Generate();
+            //instantiate all the game objects
+            _gameObject = Object.Instantiate(_starPrefab, new Vector2(0, 0), Quaternion.Euler(0, 0, _rotation));
+
+            Vector3
+                scale = Vector3.one * (_size + 2) *
+                        (_size + 2); //TODO: What does this do? Either needs commenting, or assign those sub expressions to named local variables
+            _gameObject.transform.localScale = scale;
+
+            foreach (Orbital obj in _satellites)
+            {
+                obj.Load();
+            }
         }
-    }
 
-    public void Unload() {
-        GameObject.Destroy(gameObject);
-        foreach (Orbital obj in satellites) {
-            obj.Unload();
-            GameObject.Destroy(obj.gameObject);
+        internal void Unload()
+        {
+            Object.Destroy(_gameObject);
+            foreach (Orbital obj in _satellites)
+            {
+                obj.Unload();
+                Object.Destroy(obj.GameObject);
+            }
+            foreach (WorldPlanetoid p in Object.FindObjectsOfType<WorldPlanetoid>())
+            {
+                Object.Destroy(p.gameObject);
+            }
         }
-        foreach (WorldPlanetoid p in GameObject.FindObjectsOfType<WorldPlanetoid>()) {
-            GameObject.Destroy(p.gameObject);
+
+        #endregion Internal Methods
+
+        #region Private Methods
+
+        private bool Generate()
+        {
+            if (_isGenerated) return false;
+
+            var rand = new Random(Seed);
+            _temp = rand.Next(Temps.Count);
+            _size = rand.Next(Sizes.Count);
+
+            int numOrbits = 5 * (_size + 1);
+            for (var i = 1; i <= numOrbits; i++)
+            {
+                GenerateOrbital(rand, i);
+            }
+
+
+            _starPrefab = (GameObject)Resources.Load("Prefabs/Stars/" + Temps[_temp]);
+            _rotation = (int)(360 * rand.NextDouble());
+            return true;
         }
-    }
 
-    public IEnumerator GetEnumerator() {
-        return (IEnumerator)this;
-    }
+        private void GenerateOrbital(Random rand, int i)
+        {
+            double r = rand.NextDouble();
+            if (r < 0.5)
+            {
+                var p = new Planetoid(rand.Next());
+                _satellites.Add(p);
+                p.Generate(i);
+            }
+            else
+            {
+                _satellites.Add(new EmptyOrbital(0));
+            }
+        }
 
-    public bool MoveNext() {
-        if (enumeratorPosition > satellites.Count) return false;
-        enumeratorPosition++;
-        return (enumeratorPosition <= satellites.Count);
+        #endregion Private Methods
     }
-
-    public void Reset() {
-        enumeratorPosition = -1;
-    }
-
-    public void Dispose() { }
 }

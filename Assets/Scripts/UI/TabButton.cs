@@ -1,31 +1,48 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class TabButton : MonoBehaviour {
+namespace UI {
+    public class TabButton : MonoBehaviour {
 
-    public InteractionUI window { get; private set; }
-    public InteractionTab tab { get; private set; }
-    [SerializeField]
-    private Text textObject;
+        #region Private Fields
 
-    public string text {
-        get {
-            return textObject.text;
+        [FormerlySerializedAs("textObject")] [SerializeField] private Text _textObject;
+
+        #endregion Private Fields
+
+        #region Internal Properties
+
+        internal string Text {
+            get { return _textObject.text; }
+            set { _textObject.text = value; }
         }
-        set {
-            textObject.text = value;
+
+        #endregion Internal Properties
+
+        #region Private Properties
+
+        private InteractionTab Tab { get; set; }
+        private InteractionUI Window { get; set; }
+
+        #endregion Private Properties
+
+        #region Public Methods
+
+        public void SelectTab() {
+            Window.SetActiveTab(Tab);
         }
-    }
 
-	public void Bind(InteractionUI window, InteractionTab tab) {
-        this.window = window;
-        this.tab = tab;
-    }
+        #endregion Public Methods
 
-    public void SelectTab() {
-        window.SetActiveTab(tab);
-    }
+        #region Internal Methods
 
+        internal void Bind(InteractionUI window, InteractionTab tab) {
+            Window = window;
+            Tab = tab;
+        }
+
+        #endregion Internal Methods
+
+    }
 }

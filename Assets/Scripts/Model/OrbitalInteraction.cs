@@ -1,16 +1,27 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UI;
 
-public abstract class OrbitalInteraction {
+namespace Model {
+    public abstract class OrbitalInteraction {
 
-    protected Orbital obj;
+        #region Private Fields
 
-    public OrbitalInteraction(Orbital obj) {
-        this.obj = obj;
+        private Orbital _obj;
+
+        #endregion Private Fields
+
+        #region Protected Constructors
+
+        protected OrbitalInteraction(Orbital obj) {
+            _obj = obj;
+        }
+
+        #endregion Protected Constructors
+
+        #region Internal Methods
+
+        internal abstract InteractionTab GetTab();
+
+        #endregion Internal Methods
+
     }
-
-    public abstract InteractionTab GetTab();
-    
-
 }

@@ -1,34 +1,59 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Controllers;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class WorldUI : MonoBehaviour {
+namespace UI {
+    public class WorldUI : MonoBehaviour {
 
-    public GameObject player;
-    public GameObject pipPrefab;
-    private Dictionary<GameObject, RadarObject> disctionary = new Dictionary<GameObject, RadarObject>();
+        #region Public Fields
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        this.transform.position = player.transform.position;
-	}
+        [FormerlySerializedAs("pipPrefab")] public GameObject PipPrefab;
+        [FormerlySerializedAs("player")] public GameObject Player;
 
-    public void AddTrackingObject(GameObject obj) {
-        RadarObject pip = GameObject.Instantiate(pipPrefab, this.transform).GetComponent<RadarObject>();
-        pip.trackedObject = obj;
-        disctionary.Add(obj, pip);
-    }
-    
-    public void RemoveTrackingObject(GameObject obj) {
-        disctionary.Remove(obj);
-    }
+        #endregion Public Fields
 
-    public void Clear() {
-        disctionary.Clear();
+        #region Private Fields
+
+        private Dictionary<GameObject, RadarObject> _dictionary;
+
+        #endregion Private Fields
+
+        #region Public Methods
+
+        public void RemoveTrackingObject(GameObject obj) {
+            _dictionary.Remove(obj);
+        }
+
+        #endregion Public Methods
+
+        #region Internal Methods
+
+        internal void AddTrackingObject(GameObject obj) {
+            var pip = Instantiate(PipPrefab, transform).GetComponent<RadarObject>();
+            pip.TrackedObject = obj;
+            _dictionary.Add(obj, pip);
+        }
+
+        internal void Clear() {
+            _dictionary.Clear();
+        }
+
+        #endregion Internal Methods
+
+        #region Private Methods
+
+        // Use this for initialization
+        private void Awake() {
+            _dictionary = new Dictionary<GameObject, RadarObject>();
+        }
+
+        // Update is called once per frame
+        private void Update() {
+            transform.position = Player.transform.position;
+        }
+
+        #endregion Private Methods
+
     }
 }

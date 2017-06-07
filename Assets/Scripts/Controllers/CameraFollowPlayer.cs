@@ -1,43 +1,89 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 
-public class CameraFollowPlayer : MonoBehaviour {
+namespace Controllers {
+    [UsedImplicitly]
+    internal class CameraFollowPlayer : MonoBehaviour {
 
-    public GameObject player;
-    public float cameraFollowDelay = 0.3f;
-    public float cameraZoomFactor = 0.5f;
-    private Vector3 cameraVelocity = new Vector3(0, 0, 0);
-    private bool follow = true;
+        #region Private Fields
 
-	// Use this for initialization
-	void Start () {
-		
-	}
+        [Component] private Camera _camera;
+        [SerializeField] private GameObject _player;
+        [SerializeField] private readonly float _cameraFollowDelay = 0.3f;
+        [SerializeField] private readonly float _cameraZoomFactor = 0.5f;
+        private Vector3 _cameraVelocity = new Vector3(0, 0, 0);
+        private bool _cameraVelocityZoom = true;
+        private bool _isFollowing = true;
+        private const float CameraMinimumZoom = 5.0f;
+        private const float CameraZOffset = 10.0f;
+        private GameObject _targetObject;
 
-    // Update is called once per frame
-    void FixedUpdate() {
-        if (follow) {
-            Vector3 target = player.transform.position - new Vector3(0, 0, 10);
-            Vector3 newPos = Vector3.SmoothDamp(transform.position, target, ref cameraVelocity, cameraFollowDelay);
-            transform.position = newPos;
-            GetComponent<Camera>().orthographicSize = 5f + cameraVelocity.magnitude * cameraZoomFactor;
+        #endregion Private Fields
+
+        #region Private Properties
+
+        private Vector3 Position {
+            get { return transform.position; }
+            set { transform.position = value; }
         }
-    }
 
-    public void LockToPosition(Nullable<Vector2> pos) {
-        LockToPosition(pos, 0f);
-    }
+        private Vector3 TargetPosition {
+            get { return _targetObject.transform.position; }
+        }
 
-    public void LockToPosition(Nullable<Vector2> pos, float zoom) {
-        if (!pos.HasValue) {
-            follow = true;
+        private float CameraSize {
+            set { _camera.orthographicSize = value; }
         }
-        else {
-            follow = false;
-            transform.position = new Vector3(pos.Value.x, pos.Value.y, -10);
-            GetComponent<Camera>().orthographicSize = 5f - zoom;
+
+        #endregion Private Properties
+
+        #region Internal Methods
+
+        internal void LockToPosition(Vector2 targetPosition, float zoom = 0f) {
+            _isFollowing = false;
+            Position = new Vector3(targetPosition.x, targetPosition.y, CameraZOffset);
+            CameraSize = CameraMinimumZoom - zoom;
         }
+
+        internal void FollowTarget(GameObject target) {
+            _isFollowing = true;
+            if (target == null) target = _player;
+            _targetObject = target;
+        }
+
+        #endregion Internal Methods
+
+        #region Private Methods
+
+
+        [UsedImplicitly]
+        private void Start() {
+            this.LoadComponents();
+            FollowTarget(_player);
+        }
+
+        [UsedImplicitly]
+        private void FixedUpdate() {
+            if (_isFollowing) MoveToPlayerSmoothly();
+            if (_cameraVelocityZoom) UpdateCameraZoom();
+        }
+
+        private void MoveToPlayerSmoothly() {
+            Vector3 target = GetTargetCameraPosition();
+            Position = Vector3.SmoothDamp(Position, target, ref _cameraVelocity, _cameraFollowDelay);
+        }
+
+        private Vector3 GetTargetCameraPosition() {
+            return TargetPosition - new Vector3(0, 0, CameraZOffset);
+        }
+
+        private void UpdateCameraZoom() {
+            CameraSize = CameraMinimumZoom + (_cameraVelocity.magnitude * _cameraZoomFactor);
+        }
+
+        #endregion Private Methods
+
     }
 }
