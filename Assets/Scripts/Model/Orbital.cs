@@ -14,9 +14,14 @@ namespace Model {
 
         private const float MinRadius = 200;
         private const float RadiusRange = 100;
-        private bool _isGenerated;
 
         #endregion Private Fields
+
+        #region Protected Fields
+
+            protected bool _isGenerated;
+
+        #endregion Protected Fields
 
         #region Internal Properties
 

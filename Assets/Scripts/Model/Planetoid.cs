@@ -45,55 +45,19 @@ namespace Model {
         private float _rotation;
 
         private int _techLevel;
+        private int _orbital;
 
         #endregion Private Fields
 
         #region Public Constructors
 
-        public Planetoid(int seed) : base(seed) {
+        public Planetoid(int seed, int orbital) : base(seed) {
+            _orbital = orbital;
         }
 
         #endregion Public Constructors
 
         #region Public Methods
-
-        public new bool Generate(int orbital) {
-            if (!base.Generate(orbital)) return false;
-
-            List<PlanetType> validTypes = orbital < 4 ? TypesNoIce : Types;
-
-            var r = new Random(Seed);
-            double val = r.NextDouble();
-            float div = validTypes.Sum(t => t.Weight);
-
-            var total = 0f;
-            Type = validTypes[validTypes.Count - 1];
-
-            foreach (PlanetType t in validTypes) {
-                total += t.Weight / div;
-                if (total > val) {
-                    Type = t;
-                    break;
-                }
-            }
-
-            _techLevel = r.Next(TechLevels.Count);
-
-            _interactions = new List<OrbitalInteraction>();
-            var info = new InfoInteraction(this, Seed);
-            info.Generate(_techLevel, orbital, Type);
-
-            _interactions.Add(info);
-            if (_techLevel > 0) {
-                var trade = new TradeInteraction(this, Seed);
-                trade.Generate(_techLevel);
-                //interactions.Add(trade);
-            }
-
-            _prefab = (GameObject) Resources.Load("Prefabs/Planets/" + Type.Name);
-            _rotation = (int) (360 * r.NextDouble());
-            return true;
-        }
 
         public string GetInteractionText() {
             return "Press the interact key to land";
@@ -124,12 +88,51 @@ namespace Model {
         #region Internal Methods
 
         internal override void Load() {
+            Generate();
             var x = (int) (Radius * Mathf.Cos(Angle));
             var y = (int) (Radius * Mathf.Sin(Angle));
 
             GameObject = Object.Instantiate(_prefab, new Vector3(x, y, 0), Quaternion.Euler(0, 0, _rotation));
             var wp = GameObject.GetComponent<WorldPlanetoid>();
             wp.Source = this;
+        }
+
+        internal new bool Generate() {
+            if (!base.Generate(_orbital)) return false;
+
+            List<PlanetType> validTypes = _orbital < 4 ? TypesNoIce : Types;
+
+            var r = new Random(Seed);
+            double val = r.NextDouble();
+            float div = validTypes.Sum(t => t.Weight);
+
+            var total = 0f;
+            Type = validTypes[validTypes.Count - 1];
+
+            foreach (PlanetType t in validTypes) {
+                total += t.Weight / div;
+                if (total > val) {
+                    Type = t;
+                    break;
+                }
+            }
+
+            _techLevel = r.Next(TechLevels.Count);
+
+            _interactions = new List<OrbitalInteraction>();
+            var info = new InfoInteraction(this, Seed);
+            info.Generate(_techLevel, _orbital, Type);
+
+            _interactions.Add(info);
+            if (_techLevel > 0) {
+                var trade = new TradeInteraction(this, Seed);
+                trade.Generate(_techLevel);
+                //interactions.Add(trade);
+            }
+
+            _prefab = (GameObject) Resources.Load("Prefabs/Planets/" + Type.Name);
+            _rotation = (int) (360 * r.NextDouble());
+            return true;
         }
 
         #endregion Internal Methods

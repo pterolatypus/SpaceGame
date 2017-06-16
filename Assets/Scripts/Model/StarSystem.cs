@@ -11,26 +11,9 @@ namespace Model
     {
         #region Private Fields
 
-        private static readonly List<string> Sizes = new List<string> {
-            "Dwarf",
-            "Star",
-            "Giant",
-            "Supergiant"
-        };
-
-        private static readonly List<string> Temps = new List<string> {
-            "Red",
-            "Yellow",
-            "White",
-            "Blue"
-        };
-
         private readonly List<Orbital> _satellites;
-        private GameObject _gameObject;
         private bool _isGenerated = false;
         private int _rotation;
-        private GameObject _starPrefab;
-        private int _temp, _size;
 
         #endregion Private Fields
 
@@ -39,7 +22,7 @@ namespace Model
         [NotNull]
         public string Type
         {
-            get { return Temps[_temp] + " " + Sizes[_size]; }
+            get { return ((Star)_satellites[0]).Type; }
         }
 
         #endregion Public Properties
@@ -90,14 +73,6 @@ namespace Model
         {
             Debug.Log("Loading system");
             Generate();
-            //instantiate all the game objects
-            _gameObject = Object.Instantiate(_starPrefab, new Vector2(0, 0), Quaternion.Euler(0, 0, _rotation));
-
-            Vector3
-                scale = Vector3.one * (_size + 2) *
-                        (_size + 2); //TODO: What does this do? Either needs commenting, or assign those sub expressions to named local variables
-            _gameObject.transform.localScale = scale;
-
             foreach (Orbital obj in _satellites)
             {
                 obj.Load();
@@ -106,15 +81,9 @@ namespace Model
 
         internal void Unload()
         {
-            Object.Destroy(_gameObject);
             foreach (Orbital obj in _satellites)
             {
                 obj.Unload();
-                Object.Destroy(obj.GameObject);
-            }
-            foreach (WorldPlanetoid p in Object.FindObjectsOfType<WorldPlanetoid>())
-            {
-                Object.Destroy(p.gameObject);
             }
         }
 
@@ -127,34 +96,34 @@ namespace Model
             if (_isGenerated) return false;
 
             var rand = new Random(Seed);
-            _temp = rand.Next(Temps.Count);
-            _size = rand.Next(Sizes.Count);
 
-            int numOrbits = 5 * (_size + 1);
-            for (var i = 1; i <= numOrbits; i++)
-            {
-                GenerateOrbital(rand, i);
+            Star star = GenerateStar(rand);
+            _satellites.Add(star);
+
+            int numOrbits = 5 * (star.Size + 1);
+            for (var i = 1; i <= numOrbits; i++) {
+                var orbitalObject = GenerateOrbital(rand, i);
+                _satellites.Add(orbitalObject);
             }
 
-
-            _starPrefab = (GameObject)Resources.Load("Prefabs/Stars/" + Temps[_temp]);
-            _rotation = (int)(360 * rand.NextDouble());
             return true;
         }
 
-        private void GenerateOrbital(Random rand, int i)
-        {
+        private Orbital GenerateOrbital(Random rand, int orbital) {
+            Orbital orbitalObject;
+            if (orbital == 0) orbitalObject = GenerateStar(rand);
+            else orbitalObject = GenerateNonStarOrbital(rand, orbital);
+            return orbitalObject;
+        }
+
+        private Star GenerateStar(Random rand) {
+            return new Star(rand.Next());
+        }
+
+        private Orbital GenerateNonStarOrbital(Random rand, int orbital) {
             double r = rand.NextDouble();
-            if (r < 0.5)
-            {
-                var p = new Planetoid(rand.Next());
-                _satellites.Add(p);
-                p.Generate(i);
-            }
-            else
-            {
-                _satellites.Add(new EmptyOrbital(0));
-            }
+            if (r < 0.5) return new Planetoid(rand.Next(), orbital);
+            else return new EmptyOrbital(0);
         }
 
         #endregion Private Methods

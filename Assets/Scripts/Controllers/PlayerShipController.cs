@@ -13,7 +13,7 @@ namespace Controllers {
 
         private const float AnimSpeedMax = 2f;
         private const float AnimSpeedMin = 0.5f;
-        private IInteractable _interactionTarget;
+        private Interactable _interactionTarget;
         private float _greatestObservedSpeed = 1f;
         [Component] private Animator _anim;
         [Component]private Rigidbody2D _rb;
@@ -91,17 +91,17 @@ namespace Controllers {
 
         [UsedImplicitly]
         private void OnTriggerEnter2D([NotNull] Collider2D other) {
-            var interactableSource = other.gameObject.GetComponent<WorldOrbital>().Source as IInteractable;
+            var interactableSource = other.gameObject.GetComponent<WorldOrbital>().Source as Interactable;
             if (interactableSource != null) SetInteractionTarget(interactableSource);
         }
 
         [UsedImplicitly]
         private void OnTriggerExit2D([NotNull] Collider2D other) {
-            var interactableSource = other.gameObject.GetComponent<WorldOrbital>().Source as IInteractable;
+            var interactableSource = other.gameObject.GetComponent<WorldOrbital>().Source as Interactable;
             if (interactableSource != null) SetInteractionTarget(null);
         }
 
-        private void SetInteractionTarget([CanBeNull] IInteractable interactable) {
+        private void SetInteractionTarget([CanBeNull] Interactable interactable) {
             _interactionTarget = interactable;
             UpdateInteractionText();
         }
